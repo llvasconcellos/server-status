@@ -9,7 +9,7 @@ import math
 os.chdir('/home/root/gpio')
 print "*** START server_status.py ***"
 
-# INITIALISE SETTINGS
+## INITIALISE VARIABLES
 
 red = mraa.Gpio(31)     # 'GP44'
 red.dir(mraa.DIR_OUT)
@@ -25,12 +25,13 @@ buendia_url = 'localhost'
 openmrs_url = 'localhost:9000/openmrs/index.htm'
 
 last_check = time.time()
+last_log_trunc = time.time()
 
 # reset openmrs internal status to match openmrs_int
 subprocess.call('echo -1 > /home/root/debian/home/buendia/server_status.txt', shell=True)
 
 
-# FUNCTIONS
+## FUNCTIONS
 
 # Returns next line number (debugging)
 def report():
@@ -105,7 +106,7 @@ red.write(1)
 # 4 - backup failed
 
 
-# MAIN LOOP
+## MAIN LOOP
 
 ## LOGIC SUMMARY
 # has Buendia been detected yet?
@@ -125,8 +126,9 @@ red.write(1)
 print '*** START MAIN LOOP ***'
 
 while True:
-  if time.time() - last_check > 10800:  # truncate log file every 3 hours
+  if time.time() - last_log_trunc > 10800:  # truncate log file every 3 hours
     subprocess.call("tail -1000 sd/log.txt > sd/log.tmp; mv sd/log.tmp > sd/log.txt", shell=True)
+    last_log_trunc = time.time()
   if buendia == 0:
     # STAGE 1: Buendia not running. Ping for response
     buendia_status = check_url(buendia_url)
@@ -143,7 +145,7 @@ while True:
       openmrs_status = check_url(openmrs_url)   # Ping OpenMRS for response
       openmrs_new = openmrs_status[0]
       if openmrs_new == 0:                      # OpenMRS not detected
-        flash_colours([red, blue], 10, .2)       # 5 seconds
+        flash_colours([red, blue], 10, .2)
       else:                                     # OpenMRS detected
         # STAGE 3: OpenMRS detected
         openmrs_ext = 1                         # [possible bug if classify_status returned code 2..]
