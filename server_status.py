@@ -62,16 +62,16 @@ def openmrs_internal_status(): # runs for ~1 second regardless of state
     openmrs_int = openmrs_int_new
   # TASK LED's according to OpenMRS server status
   if openmrs_int == 0:       # down - flash RED
-    flash_colours([red], 1, .1)
+    flash_colours([red], 1, .5)
   elif openmrs_int == 1:     # normal use - BLUE on
     blue.write(1)
     time.sleep(1)
   elif openmrs_int == 2:     # activity  - blink BLUE on/off
-    flash_colours([blue], 1, .1)
+    flash_colours([blue], 1, .05)
   elif openmrs_int == 3:     # backing-up - blink BLUE/GREEN
     flash_colours([blue, green], 1, .1)
   elif openmrs_int == 4:     # back-up failed - blink BLUE/RED
-    flash_colours([blue, red], 1, .1)
+    flash_colours([blue, red], 1, .5)
   else:
     time.sleep(1)
 
@@ -137,13 +137,13 @@ while True:
       report()
       reset()
     else:
-      time.sleep(5)                             # LED is red so just sleep
+      time.sleep(10)                            # LED is red so just sleep
   else:                                         # Buendia is running
     if openmrs_ext == 0:                        # has OpenMRS not been detected yet?
       openmrs_status = check_url(openmrs_url)   # Ping OpenMRS for response
       openmrs_new = openmrs_status[0]
       if openmrs_new == 0:                      # OpenMRS not detected
-        flash_colours([red, blue], 5, .2)       # 5 seconds
+        flash_colours([red, blue], 10, .2)       # 5 seconds
       else:                                     # OpenMRS detected
         # STAGE 3: OpenMRS detected
         openmrs_ext = 1                         # [possible bug if classify_status returned code 2..]
@@ -161,6 +161,6 @@ while True:
           # we could have a server problem, so do not update 'openmrs_ext' but blink RED instead
           report()
           reset()
-          flash_colours([red], 60, .1)          # 60 seconds (i.e. time to next external check)
+          flash_colours([red], 60, .5)          # 60 seconds (i.e. time to next external check)
   sys.stdout.flush()                            # output to file now
 
