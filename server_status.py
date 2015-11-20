@@ -46,7 +46,8 @@ def reset():
 # flash list of LEDs for individual periods and total duration (cycles rounded to multiple of len(leds) )
 def flash_colours(leds, duration, period):
   n = len(leds)
-  for i in range(int( n * math.floor(.5 + duration/(n*n*period)) )):
+  iterations = int(math.floor(float(float(duration) / period) / n + .5) * n)
+  for i in range(iterations):
     leds[i%n].write(1)
     time.sleep(period)
     leds[i%n].write(0)
@@ -67,12 +68,18 @@ def openmrs_internal_status(): # runs for ~1 second regardless of state
   elif openmrs_int == 1:     # normal use - BLUE on
     blue.write(1)
     time.sleep(1)
-  elif openmrs_int == 2:     # activity  - blink BLUE on/off
-    flash_colours([blue], 1, .05)
-  elif openmrs_int == 3:     # backing-up - blink BLUE/GREEN
-    flash_colours([blue, green], 1, .1)
-  elif openmrs_int == 4:     # back-up failed - blink BLUE/RED
+  elif openmrs_int == 2:     # back-up: started  - blink BLUE slow
+    flash_colours([blue], 1, .5)
+  elif openmrs_int == 3:     # back-up: processing - blink BLUE fast
+    flash_colours([blue], 1, .1)
+  elif openmrs_int == 4:     # back-up: failed - blink BLUE/RED slow
     flash_colours([blue, red], 1, .5)
+  elif openmrs_int == 5:     # update: checking - blink GREEN slow
+    flash_colours([green], 1, .5)
+  elif openmrs_int == 6:     # update: updating - blink GREEN fast
+    flash_colours([green], 1, .1)
+  elif openmrs_int == 7:     # update: failed - blink GREEN/RED slow
+    flash_colours([green, red], 1, .5)
   else:
     time.sleep(1)
 

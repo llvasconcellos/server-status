@@ -2,20 +2,19 @@ First we need to deactivate the Buendia Server to connect to LAN internet.  This
 
     echo "NETWORKING_AP=0
     NETWORKING_DHCP_DNS_SERVER=0
-    NETWORKING_SSID=your_network_id
-    NETWORKING_PASSWORD=your_network_pwd" > /home/root/debian/usr/share/buendia/site/99-local
+    NETWORKING_SSID=yourwifinetwork
+    NETWORKING_PASSWORD=yourwifinpassword" > /home/root/debian/usr/share/buendia/site/99-local
     
     reboot
 
-When you're back up, test the internet with
-
-    curl icanhazip.com
+When you're back up you can test the internet with `curl icanhazip.com`.
 
 
 #### GPIO Setup
 
 GPIO appears to only work from Yocto.  Yocto comes pre-installed with the necessary GPIO libraries, but does require an update.  Yocto's package manager (equivalent of `apt-get`) is `opkg`, and work's in pretty much the same way.
 
+    echo "src mraa-upm http://iotdk.intel.com/repos/1.1/intelgalactic" > /etc/opkg/mraa-upm.conf
     opkg update
     opkg install libmraa0
     
@@ -59,7 +58,6 @@ Setup working folders
 
     mkdir /home/root/debian/home/buendia
     mkdir /home/root/debian/home/buendia/sd
-    cd /home/root/debian/home/buendia
 
 Mount SD card
 
@@ -75,31 +73,50 @@ Symbolic folder from Yocto to debian SD card folder
 
     ln -s /home/root/debian/home/buendia/sd /home/root/gpio/sd
 
-Get the server-reporting Python script
+Get the server-reporting Python script (requires chroot as git is only on Debian)
 
-    chroot /home/root/debian git clone https://github.com/geotheory/buendia_server_status
-    cp buendia_server_status/server_status.py /home/root/gpio
-    chmod 755 /home/root/gpio/server_status.py
+    chroot /home/root/debian/ /bin/bash
+    cd /home/buendia/sd
+    git clone https://github.com/geotheory/server-status
+    exit; cd /home/root/gpio
+    cp /home/root/gpio/sd/server-status/*.py /home/root/gpio
+    chmod 755 /home/root/gpio/*.py
 
-Now we'll configure the Python script to run on startup.  This means creating a `.sh` file that will call it, and telling Yocto to execute at startup.
+
+
+Now we'll configure a script to run on startup to which we can add our commands to run the LED python scripts.  This means creating a `.sh` file in `/etc/init.d` and telling Yocto to run it at startup.
 
     mkdir /etc/init.d
     cd /etc/init.d
-    
-    echo "#!/bin/sh
-    mount /dev/mmcblk1p1 /home/root/debian/home/buendia/sd/
-    python /home/root/gpio/server_status.py >> /home/root/gpio/sd/log.txt 2>&1" > server_status.sh
-    
-    chmod 755 server_status.sh
+    cp /home/root/gpio/sd/server-status/boot_script.sh ./boot_script.sh
+    chmod 755 boot_script.sh
 
 Add script to update-rc.d daemon
 
-    update-rc.d server_status.sh defaults 99
+    update-rc.d boot_script.sh defaults 99
 
 
-### Battery status LED
+### Server Status LED
 
-For an LED to report on battery level you'll need to purchase the [SparkFun LiPo Fuel Gauge](https://www.sparkfun.com/products/10617).
+Modify the boot script so server status script will run.  Use your preferred editor or run the following command to activate the relevant line (commented-out by default).
+
+    perl -0777 -i -pe 's/# python \/home\/root\/gpio\/server_status.py/python \/home\/root\/gpio\/server_status.py/igm' boot_script.sh
+
+The daemon will automatically update.
+
+[ *** connections schematic here *** ]
+
+
+### Battery Status LED
+
+Modify the boot script so battery status scripts will run.  Either un-comment the various lines by your preferred method or:
+
+    cd /etc/init.d
+    perl -0777 -i -pe 's/# echo 101/echo 101/igm' boot_script.sh
+    perl -0777 -i -pe 's/# python \/home\/root\/gpio\/battery_status.py/python \/home\/root\/gpio\/battery_status.py/igm' boot_script.sh
+    perl -0777 -i -pe 's/# \( sleep 15/\( sleep 15/igm' boot_script.sh
+
+Now the hardware.  For an LED to report on battery level you'll need to purchase the [SparkFun LiPo Fuel Gauge](https://www.sparkfun.com/products/10617), as well as the [Sparkfun I2C Block](https://www.sparkfun.com/products/13034) to speak to it.
 
 We'll use the following pins to control an RGB LED. Note again they're labelled differently on the GPIO block to the code:
 
@@ -109,7 +126,9 @@ We'll use the following pins to control an RGB LED. Note again they're labelled 
 | GP130  | 26  | green |
 | GP129  | 25  | blue |
 
-[WORK IN PROGRESS..]
+[ *** connections schematic here *** ]
+
+Connect the battery, LiPi Fuel Gauge and I2C Block as per the circuit diagram above.  This involves removing the 400 mAh battery that comes with the Battery Block and soldering in place connectors to link to the Fuel Gauge.  It is recommended to use detatchable connectors so the Edison stack or battery can be easily accessed if necessary.
 
 
 ### Reinstating the Buendia server
@@ -119,5 +138,4 @@ Setup is now complete.  Connect LED's to the GPIO as per the table above. Then r
     rm /home/root/debian/usr/share/buendia/site/99-local
     reboot
 
-You should now see the LED's flicker to test, and then begin reporting server status
-
+You should now see the LEDs you've enacted in operation.
