@@ -62,9 +62,13 @@ while True:
     with open('.battery_led_test', "w") as myfile:
       myfile.write(time.strftime('%X') + ' red ' + str(charge) + '\n')
     time.sleep(snooze)
-  else:
+  elif charge > 0:
     flash_colours([red], snooze, charge/30)
     with open('.battery_led_test', "w") as myfile:
       myfile.write(time.strftime('%X') + ' flashing red ' + str(charge) + '\n')
+  else:
+    time.sleep(snooze)
+    with open('.battery_led_test', "w") as myfile:
+      myfile.write(time.strftime('%X') + ' zero charge\n')
   sys.stdout.flush()
 
