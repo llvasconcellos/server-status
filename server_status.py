@@ -7,7 +7,7 @@ import sys
 import math
 
 os.chdir('/home/root/gpio')
-print "*** START server_status.py ***"
+print time.strftime('%X') + " START"
 
 ## INITIALISE VARIABLES
 
@@ -99,8 +99,10 @@ def check_url(url):
 
 
 # Test LEDs, then RED on
-report()
-flash_colours([red, green, blue], 3, .05)
+flash_colours([red, green, blue], 3, .1)
+time.sleep(.5)
+# explicit order to check pin connections: red, green, blue
+flash_colours([red, green, blue], 3, 1)
 time.sleep(1)
 red.write(1)
 

@@ -44,24 +44,14 @@ Connect an LED to your Edison's GPIO Block - high to the `GP44` pin, low to `GND
 You should now be blinking.
 
 
-### Buendia server status LED
-
-For this we'll use the following pins to control an RGB LED. Note they're labelled differently on the GPIO block to the code:
-
-| Label on GPIO Block  | pin # in code | RGB LED pin |
-| ------------- | ------------- | ------------- |
-| GP44  | 31  | red |
-| GP45  | 45  | green |
-| GP46  | 32  | blue |
+### Prepare folders and scripts
 
 Setup working folders
 
     mkdir /home/root/debian/home/buendia
     mkdir /home/root/debian/home/buendia/sd
 
-Mount SD card
-
-Append a line to debian's /etc/rc.local file (before 'exit') to mount the SD at /home/buendia/sd on startup
+Mount the SD card.  Append a line to debian's /etc/rc.local file (before 'exit') to mount the SD at /home/buendia/sd on startup:
 
     chroot /home/root/debian perl -0777 -i -pe 's/^exit 0/# mount SD card\nmount \/dev\/mmcblk1p1 \/home\/buendia\/sd\/ &\n\nexit 0/igm' /etc/rc.local
 
@@ -73,38 +63,46 @@ Symbolic folder from Yocto to debian SD card folder
 
     ln -s /home/root/debian/home/buendia/sd /home/root/gpio/sd
 
-Get the server-reporting Python script (requires chroot as git is only on Debian)
+Get the server-reporting Python script (requires chroot as git is only on Debian), and copy to working directory in Yocto:
 
     chroot /home/root/debian/ /bin/bash
     cd /home/buendia/sd
     git clone https://github.com/geotheory/server-status
-    exit; cd /home/root/gpio
+    exit
+    cd /home/root/gpio
     cp /home/root/gpio/sd/server-status/*.py /home/root/gpio
     chmod 755 /home/root/gpio/*.py
 
-
-
-Now we'll configure a script to run on startup to which we can add our commands to run the LED python scripts.  This means creating a `.sh` file in `/etc/init.d` and telling Yocto to run it at startup.
+Now we'll configure a script to run on startup to which we can add our commands to run the LED python scripts.  This means creating a `.sh` file in `/etc/init.d` and telling Yocto to run it at startup:
 
     mkdir /etc/init.d
     cd /etc/init.d
     cp /home/root/gpio/sd/server-status/boot_script.sh ./boot_script.sh
     chmod 755 boot_script.sh
 
-Add script to update-rc.d daemon
+Add script to update-rc.d daemon:
 
     update-rc.d boot_script.sh defaults 99
 
+(If you need to remove the script later the command is `update-rc.d -f boot_script.sh remove`.)
 
 ### Server Status LED
 
-Modify the boot script so server status script will run.  Use your preferred editor or run the following command to activate the relevant line (commented-out by default).
+Modify the boot script so server status script will run.  Use your preferred editor or run the following command to activate the relevant line (commented-out by default):
 
     perl -0777 -i -pe 's/# python \/home\/root\/gpio\/server_status.py/python \/home\/root\/gpio\/server_status.py/igm' boot_script.sh
 
 The daemon will automatically update.
 
 [ *** connections schematic here *** ]
+
+For this we'll use the following pins to control an RGB LED. Note they're labelled differently on the GPIO block to the code:
+
+| Label on GPIO Block  | pin # in code | RGB LED pin |
+| ------------- | ------------- | ------------- |
+| GP44  | 31  | red |
+| GP45  | 45  | green |
+| GP46  | 32  | blue |
 
 
 ### Battery Status LED

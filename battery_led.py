@@ -37,7 +37,7 @@ def flash_colours(leds, duration, period):
 # test LEDs
 flash_colours([red, green, blue], 3, .1)
 time.sleep(.5)
-# explicit order: red, green, blue to check pins
+# explicit order to check pin connections: red, green, blue
 flash_colours([red, green, blue], 3, 1)
 time.sleep(1)
 
