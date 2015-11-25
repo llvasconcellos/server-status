@@ -89,7 +89,7 @@ For server status we'll use the following pins to control an RGB LED (common cat
 
 This shows the schematic layout for the circuit.
 
-![](img/Buendia-server.svg)
+![](https://cdn.rawgit.com/geotheory/server-status/master/setup/img/Buendia-server.svg)
 
 Once connected you can test the circuit by manually running the `test_server_leds.py` script in the `test_scipts folder`.  If that works you're set up and on reboot the system should report.
 
@@ -135,7 +135,7 @@ We'll use the following pins to control the LED. Note again they're labelled dif
 
 This shows the schematic layout for the system's two circuits:
 
-![](img/Buendia-battery.svg)
+![](https://cdn.rawgit.com/geotheory/server-status/master/setup/img/Buendia-battery.svg)
 
 Connect the 2000mAh battery, the LiPi Fuel Gauge and the I2C Block as per the circuit diagram above.  Remove the 400 mAh battery that comes with the Battery Block, and solder in place GPIO header pins to link to the Fuel Gauge.  We recommend using detatchable connectors and jumper leads so the Edison stack or battery can be easily accessed if necessary.
 
