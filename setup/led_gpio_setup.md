@@ -1,4 +1,8 @@
-First we need to deactivate the Buendia Server to connect to LAN internet.  This is covered in more detail [here](https://github.com/projectbuendia/buendia/wiki/Setting-up-an-Edison).  To do this connect to the Edison using `screen`, as documented in setup.  You'll find yourself in _Yocto_ (NB. not the jailed Debian OS that Buendia runs on and is accessible via e.g. `chroot /home/root/debian/ /bin/bash` or directly via `ssh`; `screen` is recommended here as `ssh` will be disrupted).  Run the next 4 lines together:
+First we need to deactivate the Buendia Server to connect to LAN internet.  This is covered in more detail [here](https://github.com/projectbuendia/buendia/wiki/Setting-up-an-Edison).  To do this connect to the Edison using `screen`, as documented in setup.  You'll find yourself in _Yocto_, the branch of Linux designed for embedded projects like Edison.
+
+(NB. note that the Buendia runs on a 'jailed' Debian OS which runs on top of Yocto. Its file system is accessible from Yocto via the path `/home/root/debian` or via the symlink (shortcut) folder `/debian`.  You can access Debian via a `chroot` operation (e.g. `chroot /home/root/debian/ /bin/bash`) or directly via `ssh` when Buendia server is running.)
+
+Run the next 4 lines together:
 
     echo "NETWORKING_AP=0
     NETWORKING_DHCP_DNS_SERVER=0
@@ -20,28 +24,6 @@ GPIO appears to only work from Yocto.  Yocto comes pre-installed with the necess
     
     mkdir /home/root/gpio
     cd /home/root/gpio
-
-Now let's test the GPIO.  Run the following 13 lines together:
-
-    echo "import mraa
-    import time
-    
-    # Setup
-    x = mraa.Gpio(31)
-    x.dir(mraa.DIR_OUT)
-    
-    # Loop
-    while True:
-        x.write(1)
-        time.sleep(0.5)
-        x.write(0)
-        time.sleep(0.5)" > blink.py
-
-Connect an LED to your Edison's GPIO Block - high to the `GP44` pin, low to `GND`  Make sure you add a resistor (e.g. 1k) in series to protect the LED.
-
-    python blink.py
-
-You should now be blinking.
 
 
 ### Prepare folders and scripts
@@ -86,17 +68,17 @@ Add script to update-rc.d daemon:
 
 (If you need to remove the script later the command is `update-rc.d -f boot_script.sh remove`.)
 
+--------------------------
+
 ### Server Status LED
 
-Modify the boot script so server status script will run.  Use your preferred editor or run the following command to activate the relevant line (commented-out by default):
+Modify the boot script so server status script will run.  Either use the `vi` editor to un-comment the line under `SERVER STATUS` or run the following line and check the result with `tail /debian/etc/rc.local`:
 
     perl -0777 -i -pe 's/# python \/home\/root\/gpio\/server_status.py/python \/home\/root\/gpio\/server_status.py/igm' boot_script.sh
 
 The daemon will automatically update.
 
-[ *** connections schematic here *** ]
-
-For this we'll use the following pins to control an RGB LED. Note they're labelled differently on the GPIO block to the code:
+For server status we'll use the following pins to control an RGB LED (common cathode type). Note they're labelled differently on the GPIO block to the code:
 
 | Label on GPIO Block  | pin # in code | RGB LED pin |
 | ------------- | ------------- | ------------- |
@@ -104,10 +86,36 @@ For this we'll use the following pins to control an RGB LED. Note they're labell
 | GP45  | 45  | green |
 | GP46  | 32  | blue |
 
+This shows the schematic layout for the circuit.
+
+![](img/Buendia-server.svg)
+
+Once connected you can test the circuit by manually running the `test_server_leds.py` script in the `test_scipts folder`.  If that works you're set up and on reboot the system should report.
+
+#### Server-status LED colour codes
+
+The server-status LED (RGB) reports Buendia's status in the following ways.  Some of these are determined 'externally' by Yocto and some by the status code that is output 'internally' from Buendia.
+
+| State                          | Colour |
+| -------------                  | ------------- |
+| reboot                         | flashing blue/green slow |
+| Tomcat up                      | flashing blue/green fast |
+| OpenMRS up                     | green |
+| Internal check: down           | flashing red very slow |
+| Internal check: up             | green |
+| Internal check: backup start   | flashing blue slow |
+| Internal check: backing up     | flashing blue fast |
+| Internal check: backing failed | flashing blue/red very slow |
+| Update: checking for updates   | flashing green slow |
+| Update: updating               | flashing green faster |
+| Update: update failed          | flashing green/red very slow|
+
+
+--------------------------
 
 ### Battery Status LED
 
-Modify the boot script so battery status scripts will run.  Either un-comment the various lines by your preferred method or:
+Modify the boot script so battery status scripts will run.  Either un-comment the various lines with vi or run:
 
     cd /etc/init.d
     perl -0777 -i -pe 's/# echo 101/echo 101/igm' boot_script.sh
@@ -119,15 +127,18 @@ Now the hardware.  For an LED to report on battery level you'll need to purchase
 We'll use the following pins to control an RGB LED. Note again they're labelled differently on the GPIO block to the code:
 
 | Label on GPIO Block  | pin # in code | RGB LED pin |
-| ------------- | ------------- | ------------- |
+| ------ | --- | --- |
 | GP131  | 35  | red |
 | GP130  | 26  | green |
 | GP129  | 25  | blue |
 
-[ *** connections schematic here *** ]
+
+
+![](img/Buendia-battery.svg)
 
 Connect the battery, LiPi Fuel Gauge and I2C Block as per the circuit diagram above.  This involves removing the 400 mAh battery that comes with the Battery Block and soldering in place connectors to link to the Fuel Gauge.  It is recommended to use detatchable connectors so the Edison stack or battery can be easily accessed if necessary.
 
+--------------------------
 
 ### Reinstating the Buendia server
 
