@@ -18,14 +18,14 @@ green.dir(mraa.DIR_OUT)
 blue = mraa.Gpio(32)    # 'GP46'
 blue.dir(mraa.DIR_OUT)
 
-buendia = 0       # localhost status
+buendia     = 0   # localhost status
 openmrs_ext = 0   # openmrs server status
 openmrs_int = -1  # openmrs internal status
 buendia_url = 'localhost'
 openmrs_url = 'localhost:9000/openmrs/index.htm'
 
 last_check = time.time()
-last_log_trunc = time.time()
+last_led_check = time.time()
 
 # reset openmrs internal status to match openmrs_int
 subprocess.call('echo -1 > /home/root/debian/home/buendia/server_status.txt', shell=True)
@@ -43,14 +43,20 @@ def reset():
   green.write(0)
   blue.write(0)
 
+# modulates LED to reduce power consumption (necessary to meet GPIO TXB0108 module's output)
+def light(led, period):
+  for i in range(max(int((period/0.018)+.5), 1)):
+    led.write(1)
+    time.sleep(.008)
+    led.write(0)
+    time.sleep(.01)
+
 # flash list of LEDs for individual periods and total duration (cycles rounded to multiple of len(leds) )
 def flash_colours(leds, duration, period):
   n = len(leds)
   iterations = int(math.floor(float(float(duration) / period) / n + .5) * n)
   for i in range(iterations):
-    leds[i%n].write(1)
-    time.sleep(period)
-    leds[i%n].write(0)
+    light(leds[i%n], period)
     if n == 1:
       time.sleep(period)
 
@@ -66,8 +72,7 @@ def openmrs_internal_status(): # runs for ~1 second regardless of state
   if openmrs_int == 0:       # down - flash RED
     flash_colours([red], 1, .5)
   elif openmrs_int == 1:     # normal use - BLUE on
-    blue.write(1)
-    time.sleep(1)
+    light(blue, 1)
   elif openmrs_int == 2:     # back-up: started  - blink BLUE slow
     flash_colours([blue], 1, .5)
   elif openmrs_int == 3:     # back-up: processing - blink BLUE fast
@@ -101,11 +106,10 @@ def check_url(url):
 # Test LEDs, then RED on
 flash_colours([red, green, blue], 3, .1)
 time.sleep(.5)
-# explicit order to check pin connections: red, green, blue
+# slow flash in explicit order to confirm pin connections
 flash_colours([red, green, blue], 3, 1)
 time.sleep(1)
 red.write(1)
-
 
 ## STATUS CODES
 # 0 - down
@@ -135,9 +139,13 @@ red.write(1)
 print '*** START MAIN LOOP ***'
 
 while True:
-  if time.time() - last_log_trunc > 10800:  # truncate log file every 3 hours
-    subprocess.call("tail -1000 sd/log.txt > sd/log.tmp; mv sd/log.tmp > sd/log.txt", shell=True)
-    last_log_trunc = time.time()
+  # safeguard in case LEDs all go off
+  if time.time() - last_led_check > 60:
+    last_led_check = time.time()
+    if sum( [red.read(), green.read(), blue.read()] ) == 0:
+      buendia = 0
+      openmrs_ext = 0
+      red.write(1)
   if buendia == 0:
     # STAGE 1: Buendia not running. Ping for response
     buendia_status = check_url(buendia_url)
@@ -174,4 +182,3 @@ while True:
           reset()
           flash_colours([red], 60, .5)          # 60 seconds (i.e. time to next external check)
   sys.stdout.flush()                            # output to file now
-

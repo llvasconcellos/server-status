@@ -164,3 +164,13 @@ Setup is now complete.  Connect LED's to the GPIO as per the table above. Then r
 
 You should now see the LEDs you've enacted in operation.
 
+#### Lastly..
+
+A couple of warning README's to safeguard files in Debian side
+
+    echo "# DO NOT DELETE file server_status.txt
+    # This is critical for Buendia to speak to Yocto to report via LEDs
+    # folder 'sd' is the mounted SD card - feel free to utilise" > /debian/home/buendia/README
+
+    echo "# DO NOT DELETE folder buendia" > /debian/home/README
+

@@ -11,8 +11,8 @@ for led in leds:
 i = 0
 while True:
   leds[i].write(1)
-  time.sleep(0.5)
+  time.sleep(1)
   leds[i].write(0)
   i += 1
   if i == 3:
-  	i = 0
+    i = 0
