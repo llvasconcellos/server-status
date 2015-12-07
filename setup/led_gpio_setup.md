@@ -21,46 +21,32 @@ GPIO appears to only work from Yocto.  Yocto comes pre-installed with the necess
     echo "src mraa-upm http://iotdk.intel.com/repos/1.1/intelgalactic" > /etc/opkg/mraa-upm.conf
     opkg update
     opkg install libmraa0
-    
-    mkdir /home/root/gpio
-    cd /home/root/gpio
 
+Get the LED scripts that will work with the GPIO.  This requires `chroot` as git is only on Debian side.
 
-### Prepare folders and scripts
+    cd /home/root
+    chroot /home/root/debian git clone https://github.com/geotheory/server-status
+    mv /home/root/debian/server-status /home/root/gpio
+    cd gpio
+    chmod -R 755 *
 
-Setup working folders
+Next mount the SD card to Debian (first manually) and setup symlinks so we can use it in Yocto.
 
     mkdir /home/root/debian/home/buendia
     mkdir /home/root/debian/home/buendia/sd
+    mount /dev/mmcblk1p1 /debian/home/buendia/sd/
+    ln -s /debian/home/buendia/sd /home/root/gpio/sd
 
-Mount the SD card.  Append a line to debian's /etc/rc.local file (before 'exit') to mount the SD at /home/buendia/sd on startup:
+(Automating the SD mounting is done by the boot script we implement next.)
 
-    chroot /home/root/debian perl -0777 -i -pe 's/^exit 0/# mount SD card\nmount \/dev\/mmcblk1p1 \/home\/buendia\/sd\/ &\n\nexit 0/igm' /etc/rc.local
 
-Check it looks right - should see `mount /dev/mmcblk1p1 /home/buendia/sd/ &` above `exit 0`
-
-    tail /home/root/debian/etc/rc.local
-
-Symbolic folder from Yocto to debian SD card folder
-
-    ln -s /home/root/debian/home/buendia/sd /home/root/gpio/sd
-
-Get the server-reporting Python script (requires chroot as git is only on Debian), and copy to working directory in Yocto:
-
-    chroot /home/root/debian/ /bin/bash
-    cd /home/buendia/sd
-    git clone https://github.com/geotheory/server-status
-    exit
-    cd /home/root/gpio
-    cp /home/root/gpio/sd/server-status/*.py /home/root/gpio
-    chmod 755 /home/root/gpio/*.py
+#### Startup configuration
 
 Now we'll configure a script to run on startup to which we can add our commands to run the LED python scripts.  This means creating a `.sh` file in `/etc/init.d` and telling Yocto to run it at startup:
 
     mkdir /etc/init.d
     cd /etc/init.d
-    cp /home/root/gpio/sd/server-status/boot_script.sh ./boot_script.sh
-    chmod 755 boot_script.sh
+    cp /home/root/gpio/boot_script.sh ./
 
 Add script to update-rc.d daemon:
 
