@@ -1,3 +1,5 @@
+## GPIO LED setup instructions
+
 First we need to deactivate the Buendia Server to connect to LAN internet.  This is covered in more detail [here](https://github.com/projectbuendia/buendia/wiki/Setting-up-an-Edison).  To do this connect to the Edison using `screen`, as documented in setup.  You'll find yourself in _Yocto_, the branch of Linux designed for embedded projects like Edison.
 
 (NB. note that OpenMRS (Buendia) runs on a 'jailed' Debian OS which runs independently on top of Yocto. Its file system is accessible from Yocto via the path `/home/root/debian` or the symlink (shortcut) folder `/debian`.  You can access Debian using a `chroot` operation (e.g. `chroot /debian /bin/bash`) or directly via `ssh` when the Buendia server is up and configured as an Access Point.)
