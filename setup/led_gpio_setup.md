@@ -99,19 +99,19 @@ The server-status LED reports Buendia's status in the following ways.  Some of t
 
 | State                          | Colour |
 | -------------                  | ------------- |
-| booting                        | flashing blue/green slowly |
-| Tomcat up                      | flashing blue/green fast |
+| booting                        | blinking blue/green slowly |
+| Tomcat up                      | blinking blue/green fast |
 | OpenMRS up                     | green |
-| Internal check: server down    | flashing red very slowly |
+| Internal check: server down    | blinking red very slowly |
 | Internal check: server up      | green |
-| Internal check: backup started | flashing blue slowly |
-| Internal check: backing-up     | flashing blue fast |
-| Internal check: backup failed  | flashing blue/red very slowly |
-| Update: checking for updates   | flashing green slow |
-| Update: updating               | flashing green fast |
-| Update: update failed          | flashing green/red very slowly |
-
---------------------------
+| Internal check: backup started | blinking blue slowly |
+| Internal check: backing-up     | blinking blue fast |
+| Internal check: backup failed  | blinking blue/red very slowly |
+| Update: checking for updates   | blinking green slow |
+| Update: updating               | blinking green fast |
+| Update: update failed          | blinking green/red very slowly |
+| Server LED script failure      | flashing red (very briefly) every few seconds|
+-------------------------
 
 
 ### Battery Status LED
@@ -148,7 +148,8 @@ The battery-status LED reports battery charge level as follows:
 | Over 75%   | green  |
 | 50% - 75%  | blue   |
 | 25% - 50%  | red    |
-| Under 25%  | flashing red (gets faster) |
+| Under 25%  | blinking red (gets faster) |
+| Battery LED script failure     | flashing red (very briefly) every few seconds |
 
 On reboot the LED should now report the battery's current charge.
 
