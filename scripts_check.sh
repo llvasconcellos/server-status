@@ -28,5 +28,5 @@ while true; do
 	[ $batt != 1 ] && [ $failbatt == 0 ] && printf "battery_status.py "$batt" instance(s)\\n" >> sd/battery_status_log.txt
 	[ $serv != 1 ] && [ $failserv == 0 ] && printf "server_status.py "$serv" instance(s)\\n" >> sd/server_status_log.txt
 
-	sleep 30
+	sleep 15
 done

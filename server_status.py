@@ -62,7 +62,7 @@ def openmrs_internal_status(): # runs for ~1 second regardless of state
   global openmrs_int
   with open('/home/root/debian/home/buendia/server_status.txt', "r") as status_file:
     new_status = status_file.read()
-    subprocess.call('echo [' +  new_status + '] > /home/root/gpio/new_status.txt', shell=True)
+    print 'new_status: ' +  new_status
     openmrs_int_new = int(float(new_status))
   if not openmrs_int_new == openmrs_int:  # state has changed
     report('openmrs_int change: ' + str(openmrs_int) + ' > ' + str(openmrs_int_new))

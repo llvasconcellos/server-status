@@ -22,4 +22,4 @@ while True:
 	leds[0].write(1)
 	time.sleep(.05)
 	leds[0].write(0)
-	time.sleep(3)
+	time.sleep(2)
