@@ -66,6 +66,7 @@ def openmrs_internal_status(): # runs for ~1 second regardless of state
     openmrs_int_new = int(float(new_status))
   except:
     print "Error: poss non-numeric content in /debian/home/buendia/server_status.txt: " + new_status
+    openmrs_int_new = openmrs_int      # this is to stop the script from crashing
   if not openmrs_int_new == openmrs_int:  # state has changed
     report('openmrs_int change: ' + str(openmrs_int) + ' > ' + str(openmrs_int_new))
     reset()
