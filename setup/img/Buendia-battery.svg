@@ -79,15 +79,15 @@
                 GP13
             </text>
         </g>
-        <rect x="108" y="148" width="16" height="104" rx="2.4" ry="2.4"
-              fill="none" stroke="none" transform="rotate(90,116,200)"
+        <rect x="108" y="116" width="16" height="104" rx="2.4" ry="2.4"
+              fill="none" stroke="none" transform="rotate(90,116,168)"
               pointer-events="none"/>
         <g fill="#ffffff" font-family="Arial,Helvetica" font-weight="bold"
            text-anchor="middle" font-size="16px">
-            <text x="116" y="196.8">
+            <text x="116" y="164.8">
                 sparkfun GPIO
             </text>
-            <text x="116" y="216">
+            <text x="116" y="184">
                 Block
             </text>
         </g>
@@ -110,13 +110,13 @@
               stroke="none" pointer-events="none"/>
         <rect x="228.8" y="292.8" width="6.4" height="6.4" fill="none"
               stroke="none" pointer-events="none"/>
-        <rect x="248" y="272" width="31.2" height="10.4" fill-opacity="0"
+        <rect x="241.6" y="272" width="37.6" height="10.4" fill-opacity="0"
               fill="#dae2f2" stroke="#000000" stroke-opacity="0"
               pointer-events="none"/>
         <g fill="#000000" font-family="Arial,Helvetica" font-weight="bold"
            text-anchor="middle" font-size="13px">
-            <text x="263.35" y="281.75">
-                50 Ohm
+            <text x="260.15" y="281.75">
+                3.3k Ohm
             </text>
         </g>
         <rect x="255.2" y="327.2" width="1.6" height="1.6" fill="#000000"
@@ -138,13 +138,13 @@
               stroke="none" pointer-events="none"/>
         <rect x="228.8" y="348.8" width="6.4" height="6.4" fill="none"
               stroke="none" pointer-events="none"/>
-        <rect x="248" y="328" width="31.2" height="10.4" fill-opacity="0"
+        <rect x="241.6" y="328" width="37.6" height="10.4" fill-opacity="0"
               fill="#dae2f2" stroke="#000000" stroke-opacity="0"
               pointer-events="none"/>
         <g fill="#000000" font-family="Arial,Helvetica" font-weight="bold"
            text-anchor="middle" font-size="13px">
-            <text x="263.35" y="337.75">
-                23 Ohm
+            <text x="260.15" y="337.75">
+                1.8k Ohm
             </text>
         </g>
         <rect x="255.2" y="383.2" width="1.6" height="1.6" fill="#000000"
@@ -166,13 +166,13 @@
               stroke="none" pointer-events="none"/>
         <rect x="228.8" y="404.8" width="6.4" height="6.4" fill="none"
               stroke="none" pointer-events="none"/>
-        <rect x="248" y="384" width="31.2" height="10.4" fill-opacity="0"
+        <rect x="241.6" y="384" width="37.6" height="10.4" fill-opacity="0"
               fill="#dae2f2" stroke="#000000" stroke-opacity="0"
               pointer-events="none"/>
         <g fill="#000000" font-family="Arial,Helvetica" font-weight="bold"
            text-anchor="middle" font-size="13px">
-            <text x="263.35" y="393.75">
-                32 Ohm
+            <text x="260.15" y="393.75">
+                1.8k Ohm
             </text>
         </g>
         <path d="M 232 408 L 192 408 Q 184 408 184 400 L 184 336 Q 184 328 176 328 L 121.6 328"
@@ -664,21 +664,21 @@
                 GND
             </text>
         </g>
-        <rect x="776" y="216" width="32" height="16" rx="2.4" ry="2.4"
-              fill="none" stroke="none" transform="rotate(180,792,224)"
+        <rect x="784" y="216" width="32" height="16" rx="2.4" ry="2.4"
+              fill="none" stroke="none" transform="rotate(180,800,224)"
               pointer-events="none"/>
         <g fill="#b2b2b2" font-family="Arial,Helvetica" font-weight="bold"
            font-size="10px">
-            <text x="777.6" y="227.2">
+            <text x="785.6" y="227.2">
                 VOUT
             </text>
         </g>
-        <rect x="808" y="216" width="32" height="16" rx="2.4" ry="2.4"
-              fill="none" stroke="none" transform="rotate(180,824,224)"
+        <rect x="816" y="216" width="32" height="16" rx="2.4" ry="2.4"
+              fill="none" stroke="none" transform="rotate(180,832,224)"
               pointer-events="none"/>
         <g fill="#ffffff" font-family="Arial,Helvetica" font-weight="bold"
            font-size="10px">
-            <text x="809.6" y="227.2">
+            <text x="817.6" y="227.2">
                 SDA
             </text>
         </g>

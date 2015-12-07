@@ -62,28 +62,30 @@ def openmrs_internal_status(): # runs for ~1 second regardless of state
   global openmrs_int
   with open('/home/root/debian/home/buendia/server_status.txt', "r") as status_file:
     new_status = status_file.read()
-    print 'new_status: ' +  new_status
+  try:
     openmrs_int_new = int(float(new_status))
+  except:
+    print "Error: poss non-numeric content in /debian/home/buendia/server_status.txt: " + new_status
   if not openmrs_int_new == openmrs_int:  # state has changed
     report('openmrs_int change: ' + str(openmrs_int) + ' > ' + str(openmrs_int_new))
     reset()
     openmrs_int = openmrs_int_new
   # TASK LED's according to OpenMRS server status
-  if openmrs_int == 0:       # down - flash RED
+  if openmrs_int == 0:                 # down - flash RED
     flash_colours([red], 1, .5)
-  elif openmrs_int == 1:     # normal use - GREEN on
+  elif openmrs_int == 1:               # normal use - GREEN on
     green.write(1)
-  elif openmrs_int == 2:     # back-up: started  - blink BLUE slow
+  elif openmrs_int == 2:               # back-up: started  - blink BLUE slow
     flash_colours([blue], 1, .5)
-  elif openmrs_int == 3:     # back-up: processing - blink BLUE fast
+  elif openmrs_int == 3:               # back-up: processing - blink BLUE fast
     flash_colours([blue], 1, .1)
-  elif openmrs_int == 4:     # back-up: failed - blink BLUE/RED slow
+  elif openmrs_int == 4:               # back-up: failed - blink BLUE/RED slow
     flash_colours([blue, red], 1, .5)
-  elif openmrs_int == 5:     # update: checking - blink GREEN slow
+  elif openmrs_int == 5:               # update: checking - blink GREEN slow
     flash_colours([green], 1, .5)
-  elif openmrs_int == 6:     # update: updating - blink GREEN fast
+  elif openmrs_int == 6:               # update: updating - blink GREEN fast
     flash_colours([green], 1, .1)
-  elif openmrs_int == 7:     # update: failed - blink GREEN/RED slow
+  elif openmrs_int == 7:               # update: failed - blink GREEN/RED slow
     flash_colours([green, red], 1, .5)
   else:
     time.sleep(1)
