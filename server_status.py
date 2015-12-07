@@ -21,6 +21,7 @@ blue.dir(mraa.DIR_OUT)
 buendia     = 0   # localhost status
 openmrs_ext = 0   # openmrs server status
 openmrs_int = -1  # openmrs internal status
+
 buendia_url = 'localhost'
 openmrs_url = 'localhost:9000/openmrs/index.htm'
 
@@ -34,45 +35,44 @@ subprocess.call('echo -1 > /home/root/debian/home/buendia/server_status.txt', sh
 ## FUNCTIONS
 
 # Returns next line number (debugging)
-def report():
+def report(msg=''):
   line = inspect.currentframe().f_back.f_lineno
-  print time.strftime('%X') + ' - line ' + str(line + 1)
+  print time.strftime('%X') + ' - line ' + str(line) +' '+msg
 
 def reset():
   red.write(0)
   green.write(0)
   blue.write(0)
 
-# modulates LED to reduce power consumption (necessary to meet GPIO TXB0108 module's output)
-def light(led, period):
-  for i in range(max(int((period/0.018)+.5), 1)):
-    led.write(1)
-    time.sleep(.008)
-    led.write(0)
-    time.sleep(.01)
-
 # flash list of LEDs for individual periods and total duration (cycles rounded to multiple of len(leds) )
 def flash_colours(leds, duration, period):
   n = len(leds)
-  iterations = int(math.floor(float(float(duration) / period) / n + .5) * n)
+  iterations = int(math.floor(float(float(duration) / period) / n + .5))
+  iterations = max(1, iterations if n>1 else iterations/2)
   for i in range(iterations):
-    light(leds[i%n], period)
+    for led in leds:
+      led.write(1)
+      time.sleep(period)
+      led.write(0)
     if n == 1:
       time.sleep(period)
+  #leds[0].write(1)         # MAYBE BUG?
 
 def openmrs_internal_status(): # runs for ~1 second regardless of state
   global openmrs_int
   with open('/home/root/debian/home/buendia/server_status.txt', "r") as status_file:
-    openmrs_int_new = int(status_file.read())
+    new_status = status_file.read()
+    subprocess.call('echo [' +  new_status + '] > /home/root/gpio/new_status.txt', shell=True)
+    openmrs_int_new = int(float(new_status))
   if not openmrs_int_new == openmrs_int:  # state has changed
-    print time.strftime('%X') + ' - openmrs_int change: ' + str(openmrs_int) + ' > ' + str(openmrs_int_new)
+    report('openmrs_int change: ' + str(openmrs_int) + ' > ' + str(openmrs_int_new))
     reset()
     openmrs_int = openmrs_int_new
   # TASK LED's according to OpenMRS server status
   if openmrs_int == 0:       # down - flash RED
     flash_colours([red], 1, .5)
-  elif openmrs_int == 1:     # normal use - BLUE on
-    light(blue, 1)
+  elif openmrs_int == 1:     # normal use - GREEN on
+    green.write(1)
   elif openmrs_int == 2:     # back-up: started  - blink BLUE slow
     flash_colours([blue], 1, .5)
   elif openmrs_int == 3:     # back-up: processing - blink BLUE fast
@@ -152,7 +152,7 @@ while True:
     buendia_new = buendia_status[0]
     if buendia_new > 0:
       # STAGE 2: Buendia detected
-      buendia = 1                               # [possible bug if classify_status returned code 2..]
+      buendia = 1                               # [possible bug if openmrs_internal_status returned code 2..]
       report()
       reset()
     else:
@@ -162,18 +162,18 @@ while True:
       openmrs_status = check_url(openmrs_url)   # Ping OpenMRS for response
       openmrs_new = openmrs_status[0]
       if openmrs_new == 0:                      # OpenMRS not detected
-        flash_colours([red, blue], 10, .2)
+        flash_colours([red, green], 10, .2)
       else:                                     # OpenMRS detected
         # STAGE 3: OpenMRS detected
-        openmrs_ext = 1                         # [possible bug if classify_status returned code 2..]
+        openmrs_ext = 1                         # [possible bug if openmrs_internal_status returned code 2..]
         report()
         reset()
-        blue.write(1)
+        green.write(1)
     else:                                       # OpenMRS is running
       if time.time() - last_check < 60:         # less than minute since last status check?
         openmrs_internal_status()
       else:                                     # a minute has passed
-        report()
+        report('minute check')
         openmrs_status = check_url(openmrs_url) # ping OpenMRS again
         openmrs_new = openmrs_status[0]
         if openmrs_new == 0:                    # cannot detect OpenMRS anymore
@@ -181,4 +181,6 @@ while True:
           report()
           reset()
           flash_colours([red], 60, .5)          # 60 seconds (i.e. time to next external check)
+        else:
+          green.write(1)
   sys.stdout.flush()                            # output to file now

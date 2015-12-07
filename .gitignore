@@ -57,4 +57,5 @@ docs/_build/
 target/
 
 # temporary hold
-
+battery_status_old.py
+battery_led_old.py
