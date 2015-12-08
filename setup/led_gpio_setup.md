@@ -1,5 +1,12 @@
 ## GPIO LED setup instructions
 
+The following instructions detail the steps to setup your Intel Edison to report on Edison's server and battery charge statuses.  These reporting systems can be individually deactivated if your preferred configuration is for just one - see [startup configuration](#startup-configuration) below.
+
+--------------------------
+
+
+#### Connect to the internet
+
 First we need to deactivate the Buendia Server to connect to LAN internet.  This is covered in more detail [here](https://github.com/projectbuendia/buendia/wiki/Setting-up-an-Edison).  To do this connect to the Edison using `screen`, as documented in setup.  You'll find yourself in _Yocto_, the branch of Linux designed for embedded projects like Edison.
 
 (NB. note that OpenMRS (Buendia) runs on a 'jailed' Debian OS which runs independently on top of Yocto. Its file system is accessible from Yocto via the path `/home/root/debian` or the symlink (shortcut) folder `/debian`.  You can access Debian using a `chroot` operation (e.g. `chroot /debian /bin/bash`) or directly via `ssh` when the Buendia server is up and configured as an Access Point.)
@@ -14,6 +21,8 @@ Run the next 4 lines together to deactivate the Buendia server and connect to in
     reboot
 
 When you're back up you can test the internet with `curl icanhazip.com`.  Don't forget that Buendia needs to be reinstated after setting up the LED reporting - see instructions at the bottom.
+
+--------------------------
 
 
 #### GPIO Setup
@@ -39,7 +48,9 @@ Next mount the SD card to Debian (first manually) and setup symlinks so we can u
     mount /dev/mmcblk1p1 /debian/home/buendia/sd/
     ln -s /debian/home/buendia/sd /home/root/gpio/sd
 
-(Automating the SD mounting is done by the boot script we implement next.)
+Automating the SD mounting is done by the _boot script_ that we implement next.
+
+--------------------------
 
 
 #### Startup configuration
@@ -50,11 +61,13 @@ Now we'll configure a script to run on startup to which we can add our commands 
     cd /etc/init.d
     cp /home/root/gpio/boot_script.sh ./
 
-Add script to update-rc.d daemon:
+Yocto launches the script on startup if it has been added to the `update-rc.d daemon`:
 
     update-rc.d boot_script.sh defaults 99
 
-(If you need to remove the script later the command is `update-rc.d -f boot_script.sh remove`.)
+If you need to remove this script from the daemon at a later point the command is `update-rc.d -f boot_script.sh remove`.
+
+If you prefer to only report on server status but not battery status, just edit `/etc/init.d/boot_script.sh` to comment out the line that calls `battery_status.py`.  And vice versa to remove server status.
 
 --------------------------
 
@@ -96,6 +109,8 @@ The server-status LED reports Buendia's status in the following ways.  Some of t
 | Update: updating               | blinking green fast |
 | Update: update failed          | blinking green/red very slowly |
 | Server LED script failure      | flashing red (very briefly) every few seconds|
+
+--------------------------
 
 
 ### Battery Status LED

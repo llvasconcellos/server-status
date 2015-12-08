@@ -21,11 +21,16 @@ echo 101 > battery_charge.txt  # reset status file
 # log battery charge history
 . log_charge.sh  >> /dev/null 2>&1 &
 
+# prevent truncate errors from any missing files
+touch sd/server_status_log.txt
+touch sd/battery_status_log.txt
+touch sd/battery_charge_log.txt
+
 # truncate log files
 . truncate_logs.sh  >> /dev/null 2>&1 &
 
 # truncate battery log
 truncate() { tail -$2 $1 > $1.tmp; cat $1.tmp > $1; rm $1.tmp; }
-truncate sd/battery_charge_log.tmp 1000
+truncate sd/battery_charge_log.txt 1000
 
 exit 0

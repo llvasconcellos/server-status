@@ -10,4 +10,4 @@ LED reporting of server and battery statuses, which can be activated independent
 
 - [Additional GPIO tools and test scripts](./test_scripts/README.md)
 
-- [battery analysis](./battery/README.md)
+- [Battery analysis](./battery/README.md)

@@ -1,6 +1,6 @@
-setwd('/Users/robinedwards/Documents/MSF/Buendia/battery')
+setwd('/Users/robinedwards/Documents/MSF/Buendia/server-status/battery')
 
-datain = read.csv('battery_data.csv', header=F)
+datain = read.csv('battery_data.csv', header=T)
 
 combined = do.call('rbind', lapply(1:ncol(datain), FUN = function(i){
   d = na.omit(datain[, i])
@@ -10,14 +10,15 @@ combined = do.call('rbind', lapply(1:ncol(datain), FUN = function(i){
   lm = lm(t ~ bat, data=d)
   pred = predict.lm(lm, newdata=data.frame(bat=c(100,0)), se.fit = TRUE)
   d$t_adj = d$t - pred$fit[1]
-  d$id = i
+  d$id = ordered(names(datain)[i], levels=names(datain))
   return(d)
 }))
 
 if(require(ggplot2)){
   plt = ggplot(combined, aes(t_adj, bat, group=id, col=factor(id))) + 
     geom_line(size=1) + expand_limits(x = 0) + scale_y_continuous(limits = c(0,100)) +
-    labs(x = 'time (hours)', y = 'charge (%)', title = 'Battery Analysis')
+    labs(x = 'time (hours)', y = 'charge (%)', 
+         title = 'Battery Analysis', col = 'Session')
   ggsave(plt, file='battery_analysis_plot.pdf', w=6, h=4)
 }
 
