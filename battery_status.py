@@ -87,10 +87,15 @@ time.sleep(1)
 # Main loop
 while True:
   charge = get_battery_status()
+  with open('battery_charge.txt', "w") as myfile:
+    myfile.write(str(charge) + '\n')
   try:
-    charge = float(charge)
+    charge = int(charge)
   except:
-    print "Error: non-numeric content in battery_charge.txt"
+    print "Error: failed to convert 'charge' to int " + str(len(charge)) + ', string=' + charge
+  if charge <= 5:
+    print "Emergency shutdown: battery=" + str(charge) + "%"
+    subprocess.call('poweroff', shell=True)
   reset()
   if charge > 75:
     green.write(1)
