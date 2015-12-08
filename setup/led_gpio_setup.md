@@ -100,7 +100,7 @@ The server-status LED reports Buendia's status in the following ways.  Some of t
 
 ### Battery Status LED
 
-For an LED to report on battery level you'll need to purchase the [SparkFun LiPo Fuel Gauge](https://www.sparkfun.com/products/10617), as well as the [Sparkfun I2C Block](https://www.sparkfun.com/products/13034) to speak to it.
+For an LED to report on battery level you'll need to purchase the [SparkFun LiPo Fuel Gauge](https://www.sparkfun.com/products/10617), as well as the [Sparkfun I2C Block](https://www.sparkfun.com/products/13034) to speak to it - see [hardware setup instructions](./hardware_setup.md).
 
 We'll use the following pins to control the LED. Note again they're labelled differently on the GPIO block to the code:
 
@@ -128,7 +128,7 @@ The battery-status LED reports battery charge level as follows:
 | 50% - 75%  | blue   |
 | 25% - 50%  | red    |
 | Under 25%  | blinking red (gets faster) |
-| Battery LED script failure     | flashing red (very briefly) every few seconds |
+| Battery LED script failure | flashing red (very briefly) every few seconds |
 
 --------------------------
 

@@ -41,3 +41,7 @@ The following can be sourced online or from any decent electronics store.
 | heat-shrink tube | 1.5mm / 2.5mm thickness | ![](https://cdn.rawgit.com/geotheory/server-status/master/setup/img/heat_shrink_tube.jpg) | [MaplinUK](http://www.maplin.co.uk/p/15mm-heat-shrinkable-sleeving-1m-bf86t) |
 | velcro tape | Strong | ![](https://cdn.rawgit.com/geotheory/server-status/master/setup/img/velcro_tape.jpg) | [MaplinUK](http://www.maplin.co.uk/p/adhesive-60cm-hook-and-loop-black-n22gn) |
 
+
+
+
+
