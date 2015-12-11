@@ -3,6 +3,7 @@ import time
 import mraa
 import math
 import sys
+import subprocess
 
 os.chdir('/home/root/gpio')
 print time.strftime('%X') + " START"
@@ -65,9 +66,9 @@ def reset():
 
 # flash list of LEDs for individual periods and total duration (cycles rounded to multiple of len(leds) )
 def flash_colours(leds, duration, period):
-  n = len(leds)
-  iterations = int(math.floor(float(float(duration) / period) / n + .5))
-  iterations = max(1, iterations if n>1 else iterations/2)
+  n = float(len(leds))
+  iterations = int(math.floor((float(duration) / float(period)) / n + .5))
+  iterations = max(1, iterations if n > 1 else iterations/2)
   for i in range(iterations):
     for led in leds:
       led.write(1)
@@ -104,8 +105,9 @@ while True:
   elif charge > 25:
     red.write(1)
   elif charge > 0:
-    flash_colours([red], snooze, charge/30)
+    flash_colours([red], snooze, float(charge)/30)
   if charge > 25 or charge <= 0:
     time.sleep(snooze)
   sys.stdout.flush()
+
 

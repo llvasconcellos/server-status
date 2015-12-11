@@ -46,9 +46,9 @@ def reset():
 
 # flash list of LEDs for individual periods and total duration (cycles rounded to multiple of len(leds) )
 def flash_colours(leds, duration, period):
-  n = len(leds)
-  iterations = int(math.floor(float(float(duration) / period) / n + .5))
-  iterations = max(1, iterations if n>1 else iterations/2)
+  n = float(len(leds))
+  iterations = int(math.floor((float(duration) / float(period)) / n + .5))
+  iterations = max(1, iterations if n > 1 else iterations/2)
   for i in range(iterations):
     for led in leds:
       led.write(1)
@@ -187,3 +187,4 @@ while True:
         else:
           green.write(1)
   sys.stdout.flush()                            # output to file now
+
