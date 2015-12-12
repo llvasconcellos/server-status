@@ -33,8 +33,8 @@ while true; do
 	[ $serv != 1 ] && [ $failserv == 0 ] && printf "server_status.py "$serv" instance(s)\\n" >> sd/server_status_log.txt
 
 	# kill excess script instances
-	[ $batt -gt 1 ] && for i in $(seq 1 1 $(expr $batt - 1)); do kill $(echo "$batt_lines" | sed -n $i'p' | grep -oE '[0-9]+' | head -n 1); done && echo duplicate process killed >> sd/battery_status_log.txt
-	[ $serv -gt 1 ] && for i in $(seq 1 1 $(expr $serv - 1)); do kill $(echo "$serv_lines" | sed -n $i'p' | grep -oE '[0-9]+' | head -n 1); done && echo duplicate process killed >> sd/server_status_log.txt
+	[ $batt -gt 1 ] && for i in $(seq $(expr $batt - 1)); do kill $(echo "$batt_lines" | sed -n $i'p' | grep -oE '[0-9]+' | head -n 1); done && echo duplicate process killed >> sd/battery_status_log.txt
+	[ $serv -gt 1 ] && for i in $(seq $(expr $serv - 1)); do kill $(echo "$serv_lines" | sed -n $i'p' | grep -oE '[0-9]+' | head -n 1); done && echo duplicate process killed >> sd/server_status_log.txt
 	
 	sleep 15
 done

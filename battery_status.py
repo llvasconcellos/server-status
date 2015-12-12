@@ -65,10 +65,13 @@ def reset():
   blue.write(0)
 
 # flash list of LEDs for individual periods and total duration (cycles rounded to multiple of len(leds) )
+# includes safeguards for when variablised 'period' exceeds limits and would crash script
 def flash_colours(leds, duration, period):
   n = float(len(leds))
-  iterations = int(math.floor((float(duration) / float(period)) / n + .5))
-  iterations = max(1, iterations if n > 1 else iterations/2)
+  period = min(duration/n, max(.1, float(period)))
+  period = period if n > 1 else period/2
+  iterations = int(math.floor((float(duration) / period) / n + .5))
+  iterations = max(1, iterations if n>1 else iterations/2)
   for i in range(iterations):
     for led in leds:
       led.write(1)
@@ -96,7 +99,7 @@ while True:
     print "Error: failed to convert 'charge' to int " + str(len(charge)) + ', string=' + charge
   if charge <= 5:
     print "Emergency shutdown: battery=" + str(charge) + "%"
-    subprocess.call('poweroff', shell=True)
+    #subprocess.call('poweroff', shell=True)
   reset()
   if charge > 75:
     green.write(1)
@@ -104,9 +107,9 @@ while True:
     blue.write(1)
   elif charge > 25:
     red.write(1)
-  elif charge > 0:
+  else:
     flash_colours([red], snooze, float(charge)/30)
-  if charge > 25 or charge <= 0:
+  if charge > 25:
     time.sleep(snooze)
   sys.stdout.flush()
 
