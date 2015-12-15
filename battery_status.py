@@ -9,6 +9,8 @@ os.chdir('/home/root/gpio')
 print time.strftime('%X') + " START"
 
 snooze = 10
+charge = -101
+subprocess.call('echo 0 > /home/root/debian/home/buendia/battery_shutdown.txt', shell=True)
 
 ## INITIALISE VARIABLES
 
@@ -90,16 +92,28 @@ time.sleep(1)
 
 # Main loop
 while True:
-  charge = get_battery_status()
+  charge_new = get_battery_status()
+  try:
+    charge_new = int(charge_new)
+  except:
+    print "Error: failed to convert 'charge' to int " + str(len(charge_new)) + ', string=' + charge_new
+  
+  # smoothed charge reading
+  if charge == -101:
+    charge = float(charge_new) # initialise on 1st loop
+  charge = charge * 0.88 + float(charge_new) * 0.12  # ~ avg 12 readings (optimised params)
+
+  subprocess.call('echo ' + str(int(charge+.5)) + ' > battery_charge.txt', shell=True)
+  subprocess.call('cp battery_charge.txt /home/root/debian/home/buendia/battery_charge.txt', shell=True)
+
   with open('battery_charge.txt', "w") as myfile:
     myfile.write(str(charge) + '\n')
-  try:
-    charge = int(charge)
-  except:
-    print "Error: failed to convert 'charge' to int " + str(len(charge)) + ', string=' + charge
-  if charge <= 5:
+
+  if charge <= 5 and not charge == 0: # exception for e.g. disconnected fuel gauge wire
     print "Emergency shutdown: battery=" + str(charge) + "%"
-    #subprocess.call('poweroff', shell=True)
+    subprocess.call('echo 0 > /home/root/debian/home/buendia/battery_shutdown.txt', shell=True)
+    time.sleep(30)
+    subprocess.call('poweroff', shell=True)
   reset()
   if charge > 75:
     green.write(1)
@@ -112,5 +126,3 @@ while True:
   if charge > 25:
     time.sleep(snooze)
   sys.stdout.flush()
-
-

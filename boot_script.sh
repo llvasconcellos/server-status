@@ -16,7 +16,7 @@ echo 101 > battery_charge.txt  # reset status file
 # OTHER SCRIPTS
 
 # monitor LED scripts
-( sleep 20 ; . scripts_check.sh >> /dev/null 2>&1) &
+( sleep 20 ; . scripts_check.sh >> sd/scripts_check_log.txt 2>&1) &
 
 # log battery charge history
 . log_charge.sh  >> /dev/null 2>&1 &
