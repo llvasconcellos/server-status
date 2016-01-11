@@ -27,11 +27,6 @@ x.address(MAX17043_ADDRESS)
 
 red = mraa.Gpio(35)     # 'GP131'
 red.dir(mraa.DIR_OUT)
-green = mraa.Gpio(26)   # 'GP130'
-green.dir(mraa.DIR_OUT)
-blue = mraa.Gpio(25)    # 'GP129'
-blue.dir(mraa.DIR_OUT)
-
 
 # I2C FUNCTIONS
 
@@ -61,34 +56,21 @@ def get_battery_status():
 
 # LED FUNCTIONS
 
-def reset():
-  red.write(0)
-  green.write(0)
-  blue.write(0)
-
-# flash list of LEDs for individual periods and total duration (cycles rounded to multiple of len(leds) )
+# flash LED for individual periods and total duration
 # includes safeguards for when variablised 'period' exceeds limits and would crash script
-def flash_colours(leds, duration, period):
-  n = float(len(leds))
-  period = min(duration/n, max(.1, float(period)))
-  period = period if n > 1 else period/2
-  iterations = int(math.floor((float(duration) / period) / n + .5))
-  iterations = max(1, iterations if n>1 else iterations/2)
+def flash_colours(led, duration, period):
+  period = min(duration, max(.1, float(period)))/2
+  iterations = int(math.floor((float(duration) / period) + .5)/2)
   for i in range(iterations):
-    for led in leds:
-      led.write(1)
-      time.sleep(period)
-      led.write(0)
-    if n == 1:
-      time.sleep(period)
+    led.write(1)
+    time.sleep(period)
+    led.write(0)
+    time.sleep(period)
 
 # test LEDs
-flash_colours([red, green, blue], 3, .1)
-time.sleep(.5)
-# explicit order to check pin connections: red, green, blue
-flash_colours([red, green, blue], 3, 1)
+flash_colours(red, 3, .1)
 time.sleep(1)
-
+k = 0
 
 # Main loop
 while True:
@@ -106,21 +88,24 @@ while True:
   # output to files
   subprocess.call('echo ' + str(int(charge+.5)) + ' > battery_charge.txt', shell=True)
   subprocess.call('cp battery_charge.txt /home/root/debian/home/buendia/battery_charge.txt', shell=True)
+  if k == 0:
+    subprocess.call('cat battery_charge.txt >> sd/battery_charge_log.txt', shell=True)
+  k = (k + 1) % 60 # i.e. every 10 mins
 
   if charge <= 5 and not charge == 0: # exception for e.g. disconnected fuel gauge wire
     print "Emergency shutdown: battery=" + str(charge) + "%"
     subprocess.call('echo 1 > /home/root/debian/home/buendia/battery_shutdown.txt', shell=True)
     time.sleep(30)  # time for server to alert tablets
     subprocess.call('poweroff', shell=True)
-  reset()
-  if charge > 75:
-    green.write(1)
-  elif charge > 50:
-    blue.write(1)
+  
+  # light/flash RED LED when battery low
+  if charge > 50:
+    red.write(0)
+    time.sleep(snooze)
   elif charge > 25:
     red.write(1)
-  else:
-    flash_colours([red], snooze, float(charge)/30)
-  if charge > 25:
     time.sleep(snooze)
+  else:
+    flash_colours(red, snooze, float(charge)/30)
+  # any output to file now
   sys.stdout.flush()

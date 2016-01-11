@@ -1,7 +1,6 @@
 import subprocess
 import os
 import time
-import mraa
 import inspect
 import sys
 import math
@@ -10,13 +9,6 @@ os.chdir('/home/root/gpio')
 print time.strftime('%X') + " START"
 
 ## INITIALISE VARIABLES
-
-red = mraa.Gpio(31)     # 'GP44'
-red.dir(mraa.DIR_OUT)
-green = mraa.Gpio(45)   # 'GP45'
-green.dir(mraa.DIR_OUT)
-blue = mraa.Gpio(32)    # 'GP46'
-blue.dir(mraa.DIR_OUT)
 
 buendia     = 0   # localhost status
 openmrs_ext = 0   # openmrs server status
@@ -39,29 +31,7 @@ def report(msg=''):
   line = inspect.currentframe().f_back.f_lineno
   print time.strftime('%X') + ' - line ' + str(line) +' '+msg
 
-def reset():
-  red.write(0)
-  green.write(0)
-  blue.write(0)
-
-# flash list of LEDs for individual periods and total duration (cycles rounded to multiple of len(leds) )
-# includes safeguards for when variablised 'period' exceeds limits and would crash script
-def flash_colours(leds, duration, period):
-  n = float(len(leds))
-  period = min(duration/n, max(.1, float(period)))
-  period = period if n > 1 else period/2
-  iterations = int(math.floor((float(duration) / period) / n + .5))
-  iterations = max(1, iterations if n>1 else iterations/2)
-  for i in range(iterations):
-    for led in leds:
-      led.write(1)
-      time.sleep(period)
-      led.write(0)
-    if n == 1:
-      time.sleep(period)
-  #leds[0].write(1)         # MAYBE BUG?
-
-def openmrs_internal_status(): # runs for ~1 second regardless of state
+def openmrs_internal_status():
   global openmrs_int
   with open('/home/root/debian/home/buendia/server_status.txt', "r") as status_file:
     new_status = status_file.read()
@@ -72,25 +42,25 @@ def openmrs_internal_status(): # runs for ~1 second regardless of state
     openmrs_int_new = openmrs_int      # this is to stop the script from crashing
   if not openmrs_int_new == openmrs_int:  # state has changed
     report('openmrs_int change: ' + str(openmrs_int) + ' > ' + str(openmrs_int_new))
-    reset()
     openmrs_int = openmrs_int_new
+    ## REPORT NEW STATUS
   # TASK LED's according to OpenMRS server status
-  if openmrs_int == 0:                 # down - flash RED
-    flash_colours([red], 1, .5)
-  elif openmrs_int == 1:               # normal use - GREEN on
-    green.write(1)
-  elif openmrs_int == 2:               # back-up: started  - blink BLUE slow
-    flash_colours([blue], 1, .5)
-  elif openmrs_int == 3:               # back-up: processing - blink BLUE fast
-    flash_colours([blue], 1, .1)
-  elif openmrs_int == 4:               # back-up: failed - blink BLUE/RED slow
-    flash_colours([blue, red], 1, .5)
-  elif openmrs_int == 5:               # update: checking - blink GREEN slow
-    flash_colours([green], 1, .5)
-  elif openmrs_int == 6:               # update: updating - blink GREEN fast
-    flash_colours([green], 1, .1)
-  elif openmrs_int == 7:               # update: failed - blink GREEN/RED slow
-    flash_colours([green, red], 1, .5)
+  if openmrs_int == 0:                 # down
+    # REPORT
+  elif openmrs_int == 1:               # normal use
+    # REPORT
+  elif openmrs_int == 2:               # back-up: started
+    # REPORT
+  elif openmrs_int == 3:               # back-up: processing
+    # REPORT
+  elif openmrs_int == 4:               # back-up: failed
+    # REPORT
+  elif openmrs_int == 5:               # update: checking
+    # REPORT
+  elif openmrs_int == 6:               # update: updating
+    # REPORT
+  elif openmrs_int == 7:               # update: failed
+    # REPORT
   else:
     time.sleep(1)
 
@@ -109,14 +79,6 @@ def check_url(url):
     return [2, response]
 
 
-# Test LEDs, then RED on
-flash_colours([red, green, blue], 3, .1)
-time.sleep(.5)
-# slow flash in explicit order to confirm pin connections
-flash_colours([red, green, blue], 3, 1)
-time.sleep(1)
-red.write(1)
-
 ## STATUS CODES
 # 0 - down
 # 1 - running
@@ -128,18 +90,18 @@ red.write(1)
 ## MAIN LOOP
 
 ## LOGIC SUMMARY
-# has Buendia been detected yet?
+# has Buendia been detected yet (external check)?
 #   no - is it up now?
 #     no - sleep for 5s
 #     yes - change state to detected
 #   yes - has OpenMRS been detected yet?
 #     no - is it up now?
-#       no - flash RED/BLUE for 5s
-#       yes - change state to detected & BLUE on
+#       no - sleep for 5s
+#       yes - change state to detected
 #     yes - has minute passed since last external check?
-#       no - check OpenMRS internal status & report accordingly
+#       no - check OpenMRS internal status & report any changes
 #       yes - has OpenMRS stopped responding to ping?
-#         yes - flash RED for 60s till next ping check
+#         yes - report
 
 
 print '*** START MAIN LOOP ***'
@@ -190,4 +152,3 @@ while True:
         else:
           green.write(1)
   sys.stdout.flush()                            # output to file now
-

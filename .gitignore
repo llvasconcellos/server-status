@@ -63,4 +63,5 @@ buendia.sublime-project
 swindon_notes.md
 /LCD
 server-status.sublime-workspace
-
+lcd.py
+lcd_dev.py

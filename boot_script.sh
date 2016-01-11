@@ -2,6 +2,8 @@
 
 cd /home/root/gpio
 
+python splash_screen.py &
+
 # mount SD before anything else
 mount /dev/mmcblk1p1 /home/root/debian/home/buendia/sd/
 
@@ -17,9 +19,6 @@ echo 101 > battery_charge.txt  # reset status file
 
 # monitor LED scripts
 ( sleep 20 ; . scripts_check.sh >> sd/scripts_check_log.txt 2>&1) &
-
-# log battery charge history
-. log_charge.sh  >> /dev/null 2>&1 &
 
 # prevent truncate errors from any missing files
 touch sd/server_status_log.txt
