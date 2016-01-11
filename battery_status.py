@@ -102,17 +102,15 @@ while True:
   if charge == -101:
     charge = float(charge_new) # initialise on 1st loop
   charge = charge * 0.88 + float(charge_new) * 0.12  # ~ avg 12 readings (optimised params)
-
+  
+  # output to files
   subprocess.call('echo ' + str(int(charge+.5)) + ' > battery_charge.txt', shell=True)
   subprocess.call('cp battery_charge.txt /home/root/debian/home/buendia/battery_charge.txt', shell=True)
 
-  with open('battery_charge.txt', "w") as myfile:
-    myfile.write(str(charge) + '\n')
-
   if charge <= 5 and not charge == 0: # exception for e.g. disconnected fuel gauge wire
     print "Emergency shutdown: battery=" + str(charge) + "%"
-    subprocess.call('echo 0 > /home/root/debian/home/buendia/battery_shutdown.txt', shell=True)
-    time.sleep(30)
+    subprocess.call('echo 1 > /home/root/debian/home/buendia/battery_shutdown.txt', shell=True)
+    time.sleep(30)  # time for server to alert tablets
     subprocess.call('poweroff', shell=True)
   reset()
   if charge > 75:
