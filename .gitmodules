@@ -1,0 +1,6 @@
+[submodule "libraries/Adafruit_Python_GPIO"]
+	path = libraries/Adafruit_Python_GPIO
+	url = git@github.com:geotheory/Adafruit_Python_GPIO.git
+[submodule "libraries/Adafruit_Nokia_LCD"]
+	path = libraries/Adafruit_Nokia_LCD
+	url = git@github.com:geotheory/Adafruit_Nokia_LCD.git
