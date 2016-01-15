@@ -30,8 +30,11 @@ When you're back up you can test the internet with `curl icanhazip.com`.  Don't 
 GPIO appears to only work from Yocto.  Yocto comes pre-installed with the necessary GPIO libraries, but does require an update.  Yocto's package manager (equivalent of `apt-get`) is `opkg`, and work's in pretty much the same way.
 
     echo "src mraa-upm http://iotdk.intel.com/repos/1.1/intelgalactic" > /etc/opkg/mraa-upm.conf
+    echo "src all     http://iotdk.intel.com/repos/1.1/iotdk/all
+    src x86 http://iotdk.intel.com/repos/1.1/iotdk/x86
+    src i586    http://iotdk.intel.com/repos/1.1/iotdk/i586" > /etc/opkg/base-feeds.conf
     opkg update
-    opkg install libmraa0
+    opkg install libmraa0 git flex bison
 
 Get the LED scripts that will work with the GPIO.  This requires `chroot` as git is only on Debian side.
 

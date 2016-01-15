@@ -54,11 +54,9 @@ def get_battery_status():
   return charge
 
 
-# LED FUNCTIONS
-
 # flash LED for individual periods and total duration
 # includes safeguards for when variablised 'period' exceeds limits and would crash script
-def flash_colours(led, duration, period):
+def flash_led(led, duration, period):
   period = min(duration, max(.1, float(period)))/2
   iterations = int(math.floor((float(duration) / period) + .5)/2)
   for i in range(iterations):
@@ -67,8 +65,8 @@ def flash_colours(led, duration, period):
     led.write(0)
     time.sleep(period)
 
-# test LEDs
-flash_colours(red, 3, .1)
+# test LED
+flash_led(red, 3, .1)
 time.sleep(1)
 k = 0
 
@@ -83,7 +81,8 @@ while True:
   # smoothed charge reading
   if charge == -101:
     charge = float(charge_new) # initialise on 1st loop
-  charge = charge * 0.88 + float(charge_new) * 0.12  # ~ avg 12 readings (optimised params)
+  else:
+    charge = charge * 0.88 + float(charge_new) * 0.12  # ~ avg 12 readings (optimised params)
   
   # output to files
   subprocess.call('echo ' + str(int(charge+.5)) + ' > battery_charge.txt', shell=True)
@@ -106,6 +105,6 @@ while True:
     red.write(1)
     time.sleep(snooze)
   else:
-    flash_colours(red, snooze, float(charge)/30)
+    flash_led(red, snooze, float(charge)/30)
   # any output to file now
   sys.stdout.flush()

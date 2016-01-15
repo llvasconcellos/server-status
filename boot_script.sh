@@ -1,8 +1,11 @@
 #!/bin/sh
 
-cd /home/root/gpio
+# reset in case battery_status script fails
+echo 0 > /home/root/debian/home/buendia/battery_shutdown.txt
 
+cd /home/root/gpio
 python splash_screen.py &
+sleep 30
 
 # mount SD before anything else
 mount /dev/mmcblk1p1 /home/root/debian/home/buendia/sd/
@@ -13,12 +16,14 @@ python server_status.py >> sd/server_status_log.txt 2>&1 &
 # BATTERY STATUS
 echo 101 > battery_charge.txt  # reset status file
 # sleep briefly to allow default UART pin boot sequence to finish (a bug workaround)
-( sleep 15 ; python battery_status.py >> sd/battery_status_log.txt 2>&1) &
+sleep 15
+python battery_status.py >> sd/battery_status_log.txt 2>&1 &
 
 # OTHER SCRIPTS
 
 # monitor LED scripts
-( sleep 20 ; . scripts_check.sh >> sd/scripts_check_log.txt 2>&1) &
+sleep 20
+#. scripts_check.sh >> sd/scripts_check_log.txt 2>&1 &
 
 # prevent truncate errors from any missing files
 touch sd/server_status_log.txt

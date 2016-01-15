@@ -1,0 +1,41 @@
+/dts-v1/;
+/plugin/;
+
+/{
+        compatible = "brcm,bcm2708";
+        fragment@0 {
+                target-path = "/";
+                __overlay__ {
+
+                        spi {
+                                compatible = "spi-gpio";
+                                #address-cells = <0x1>;
+                                ranges;
+
+                                gpio-mosi = <&gpio 5 0>;
+                                gpio-miso = <&gpio 6 0>;
+                                gpio-sck = <&gpio 13 0>;
+                                cs-gpios = <&gpio 12 1>;
+                                num-chipselects = <1>;
+                                status = "ok";
+
+                //                spidev{
+                //                        compatible = "spidev";
+                //                        reg = <0>;      /* CE0 */
+                //                        #address-cells = <1>;
+                //                        #size-cells = <0>;
+                //                        spi-max-frequency = <500000>;
+                //                };
+
+
+                                ds3234@0 {
+                                        compatible = "ds3234";
+                                        reg = <0>;
+                                        #address-cells = <1>;
+                                        #size-cells = <0>;
+                                        spi-max-frequency = <500000>;
+                                };
+                        };
+                };
+        };
+};

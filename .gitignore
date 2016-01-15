@@ -61,7 +61,7 @@ target/
 notes.md
 buendia.sublime-project
 swindon_notes.md
-/LCD
+/lcd
 server-status.sublime-workspace
 lcd.py
 lcd_dev.py

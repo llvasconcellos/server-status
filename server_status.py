@@ -4,6 +4,13 @@ import time
 import inspect
 import sys
 import math
+import Adafruit_Nokia_LCD as LCD
+import Adafruit_GPIO.SPI as SPI
+from PIL import Image
+from PIL import ImageFont
+from PIL import ImageDraw
+from re import sub
+import multiprocessing
 
 os.chdir('/home/root/gpio')
 print time.strftime('%X') + " START"
@@ -20,11 +27,63 @@ openmrs_url = 'localhost:9000/openmrs/index.htm'
 last_check = time.time()
 last_led_check = time.time()
 
+# Edison software SPI config:
+SCLK = 10
+DIN = 11
+DC = 32
+RST = 46
+CS = 23
+#disp = LCD.PCD8544(DC, RST, SCLK, DIN, CS)
+font = ImageFont.truetype('fonts/Minecraftia-Regular.ttf', 8)
+
+# new line positions
+h = [-2,6,14,22,30,38]
+
 # reset openmrs internal status to match openmrs_int
 subprocess.call('echo -1 > /home/root/debian/home/buendia/server_status.txt', shell=True)
 
 
 ## FUNCTIONS
+
+# Report lines to LCD
+class LCDProcessClass(multiprocessing.Process):
+  def __init__(self, lines):
+    self.lines = lines
+    super(LCDProcessClass, self).__init__()
+  def run(self):
+    with open('contrast.txt', "r") as f:
+      contrast = int(sub('\\n', '', f.read()))
+    disp = LCD.PCD8544(DC, RST, SCLK, DIN, CS)
+    disp.begin(contrast = contrast)
+    image = Image.new('1', (LCD.LCDWIDTH, LCD.LCDHEIGHT))
+    draw = ImageDraw.Draw(image)
+    draw.rectangle((0,0,LCD.LCDWIDTH,LCD.LCDHEIGHT), outline=255, fill=255)
+    for i, line in enumerate(self.lines):
+      if i < 5:
+        draw.text((0, h[i]), line, font=font)
+    # Battery bar
+    Y = 40    # vertical position
+    with open('battery_charge.txt', "r") as f:
+      charge_val = int(f.read())
+    charge = int(50 * (float(charge_val) / 100))
+    draw.polygon([(0,1+Y), (2,1+Y), (2,0+Y), (4,0+Y), (4,1+Y), (6,1+Y), (6,7+Y), (0,7+Y)], outline=0, fill=255)
+    if charge_val == 101:
+      draw.text((12,Y-1), 'wait..', font=font)
+    elif charge_val == 0:
+      draw.text((12,Y-1), 'not reporting', font=font)
+    else:
+      draw.text((61,Y-1), str(charge_val) + '%', font=font)
+      draw.rectangle((9, Y+1, 9+50, 7+Y), outline=0, fill=255)
+      draw.rectangle((9, Y+1, 9+charge, 7+Y), outline=0, fill=0)
+    disp.image(image)
+    disp.display()
+
+# LCD process handler
+def report_lcd(lines):
+  global lcd
+  lcd.terminate()
+  lcd = LCDProcessClass(lines)
+  lcd.start()
 
 # Returns next line number (debugging)
 def report(msg=''):
@@ -39,30 +98,29 @@ def openmrs_internal_status():
     openmrs_int_new = int(float(new_status))
   except:
     print "Error: poss non-numeric content in /debian/home/buendia/server_status.txt: " + new_status
-    openmrs_int_new = openmrs_int      # this is to stop the script from crashing
+    report_lcd(['ERR: openmrs int.','status is non-numeric','server_status.txt'])
+    time.sleep(60)
+    return
   if not openmrs_int_new == openmrs_int:  # state has changed
     report('openmrs_int change: ' + str(openmrs_int) + ' > ' + str(openmrs_int_new))
     openmrs_int = openmrs_int_new
     ## REPORT NEW STATUS
-  # TASK LED's according to OpenMRS server status
-  if openmrs_int == 0:                 # down
-    # REPORT
-  elif openmrs_int == 1:               # normal use
-    # REPORT
-  elif openmrs_int == 2:               # back-up: started
-    # REPORT
-  elif openmrs_int == 3:               # back-up: processing
-    # REPORT
-  elif openmrs_int == 4:               # back-up: failed
-    # REPORT
-  elif openmrs_int == 5:               # update: checking
-    # REPORT
-  elif openmrs_int == 6:               # update: updating
-    # REPORT
-  elif openmrs_int == 7:               # update: failed
-    # REPORT
-  else:
-    time.sleep(1)
+    if openmrs_int == 0:                 # down (Not implemented)
+      report_lcd(['--SYSTEM DOWN--'])
+    elif openmrs_int == 1:               # normal use
+      report_lcd(['SYSTEM O.K.'])
+    elif openmrs_int == 2:               # back-up: started
+      report_lcd(['--START BACKUP--'])
+    elif openmrs_int == 3:               # back-up: processing
+      report_lcd(['--BACKING UP--'])
+    elif openmrs_int == 4:               # back-up: failed
+      report_lcd(['--BACKUP FAILED--'])
+    elif openmrs_int == 5:               # update: checking (Not implemented)
+      report_lcd(['--START UPDATE--'])
+    elif openmrs_int == 6:               # update: updating (Not implemented)
+      report_lcd(['--UPDATING--'])
+    elif openmrs_int == 7:               # update: failed (Not implemented)
+      report_lcd(['--UPDATE FAILED--'])
 
 # classify server repsonses - i.e. interpret top line of 'curl -Is <url>'
 def check_url(url):
@@ -92,28 +150,24 @@ def check_url(url):
 ## LOGIC SUMMARY
 # has Buendia been detected yet (external check)?
 #   no - is it up now?
-#     no - sleep for 5s
+#     no - sleep for ?s
 #     yes - change state to detected
 #   yes - has OpenMRS been detected yet?
 #     no - is it up now?
-#       no - sleep for 5s
+#       no - sleep for ?s
 #       yes - change state to detected
 #     yes - has minute passed since last external check?
 #       no - check OpenMRS internal status & report any changes
 #       yes - has OpenMRS stopped responding to ping?
 #         yes - report
 
+lcd = LCDProcessClass(['SYSTEM BOOTING']) # initialise
+lcd.start()
+time.sleep(8)
 
 print '*** START MAIN LOOP ***'
 
 while True:
-  # safeguard in case LEDs all go off
-  if time.time() - last_led_check > 60:
-    last_led_check = time.time()
-    if sum( [red.read(), green.read(), blue.read()] ) == 0:
-      buendia = 0
-      openmrs_ext = 0
-      red.write(1)
   if buendia == 0:
     # STAGE 1: Buendia not running. Ping for response
     buendia_status = check_url(buendia_url)
@@ -122,21 +176,18 @@ while True:
       # STAGE 2: Buendia detected
       buendia = 1                               # [possible bug if openmrs_internal_status returned code 2..]
       report()
-      reset()
+      report_lcd(['LOADING OPENMRS'])
     else:
       time.sleep(10)                            # LED is red so just sleep
   else:                                         # Buendia is running
     if openmrs_ext == 0:                        # has OpenMRS not been detected yet?
       openmrs_status = check_url(openmrs_url)   # Ping OpenMRS for response
       openmrs_new = openmrs_status[0]
-      if openmrs_new == 0:                      # OpenMRS not detected
-        flash_colours([red, green], 10, .2)
-      else:                                     # OpenMRS detected
+      if openmrs_new != 0:                      # OpenMRS not detected
         # STAGE 3: OpenMRS detected
         openmrs_ext = 1                         # [possible bug if openmrs_internal_status returned code 2..]
         report()
-        reset()
-        green.write(1)
+        report_lcd(['SYSTEM O.K.'])
     else:                                       # OpenMRS is running
       if time.time() - last_check < 60:         # less than minute since last status check?
         openmrs_internal_status()
@@ -145,10 +196,9 @@ while True:
         openmrs_status = check_url(openmrs_url) # ping OpenMRS again
         openmrs_new = openmrs_status[0]
         if openmrs_new == 0:                    # cannot detect OpenMRS anymore
-          # we could have a server problem, so do not update 'openmrs_ext' but blink RED instead
+          # we could have a server problem. Report and step back to system boot phase
+          openmrs_ext = 0
           report()
-          reset()
-          flash_colours([red], 60, .5)          # 60 seconds (i.e. time to next external check)
-        else:
-          green.write(1)
+          report_lcd(['OPENMRS DOWN','at ' + time.strftime("%H:%M", time.gmtime()) + 'OpenMRS', 'down: wait 10 min &','Reboot if not up.','See syslog.'])
   sys.stdout.flush()                            # output to file now
+  time.sleep(1)
