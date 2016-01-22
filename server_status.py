@@ -106,21 +106,25 @@ def openmrs_internal_status():
     openmrs_int = openmrs_int_new
     ## REPORT NEW STATUS
     if openmrs_int == 0:                 # down (Not implemented)
-      report_lcd(['--SYSTEM DOWN--'])
+      report_lcd(['SYSTEM DOWN'])
     elif openmrs_int == 1:               # normal use
-      report_lcd(['SYSTEM O.K.'])
+      report_lcd(['System OK'])
     elif openmrs_int == 2:               # back-up: started
-      report_lcd(['--START BACKUP--'])
+      report_lcd(['Backing up (SD)...'])
     elif openmrs_int == 3:               # back-up: processing
-      report_lcd(['--BACKING UP--'])
+      report_lcd(['Backing up (USB)...'])
     elif openmrs_int == 4:               # back-up: failed
-      report_lcd(['--BACKUP FAILED--'])
-    elif openmrs_int == 5:               # update: checking (Not implemented)
-      report_lcd(['--START UPDATE--'])
-    elif openmrs_int == 6:               # update: updating (Not implemented)
-      report_lcd(['--UPDATING--'])
-    elif openmrs_int == 7:               # update: failed (Not implemented)
-      report_lcd(['--UPDATE FAILED--'])
+      report_lcd(['BACKUP FAILED'])
+    elif openmrs_int == 5:               # back-up: processing
+      report_lcd(['Restoring...'])
+    elif openmrs_int == 6:               # back-up: failed
+      report_lcd(['RESTORE FAILED'])
+    elif openmrs_int == 7:               # update: updating
+      report_lcd(['Updating...'])
+    elif openmrs_int == 8:               # update: failed
+      report_lcd(['UPDATE FAILED'])
+    elif openmrs_int == 2001:            # open the pod bay doors
+      report_lcd(['I\'m sorry, Dave'])
 
 # classify server repsonses - i.e. interpret top line of 'curl -Is <url>'
 def check_url(url):
