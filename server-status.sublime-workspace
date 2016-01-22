@@ -3,43 +3,14 @@
 	{
 		"selected_items":
 		[
+			[
+				"prs",
+				"prs"
+			]
 		]
 	},
 	"buffers":
 	[
-		{
-			"file": "server_status.py",
-			"settings":
-			{
-				"buffer_size": 6334,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "lcd_dev.py",
-			"settings":
-			{
-				"buffer_size": 1206,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "thread_test.py",
-			"settings":
-			{
-				"buffer_size": 92,
-				"line_ending": "Unix",
-				"name": "import threading"
-			}
-		},
-		{
-			"contents": "import multiprocessing\nimport time\n\nclass ThreadClass(multiprocessing.Process):\n  def __init__(self, lines):\n    self.lines = lines\n    self.end = False\n    super(ThreadClass, self).__init__()\n  def run(self):\n    for line in self.lines:\n      time.sleep(1)\n      if self.end:\n        break\n      print line\n\nlcd = ThreadClass(['line 1','line 2','line 3','line 4'])\nlcd.start()\n\ntime.sleep(2.1)\nlcd.terminate()\n\nlcd = ThreadClass(['LINE 1','LINE 2','LINE 3'])\nlcd.start()\n",
-			"settings":
-			{
-				"buffer_size": 472,
-				"line_ending": "Unix"
-			}
-		}
 	],
 	"build_system": "",
 	"build_system_choices":
@@ -48,60 +19,20 @@
 	"build_varint": "",
 	"command_palette":
 	{
-		"height": 33.0,
+		"height": 392.0,
 		"last_filter": "",
 		"selected_items":
 		[
 			[
-				"install",
-				"Package Control: Install Package"
-			],
-			[
-				"everno",
-				"Evernote: List recent notes"
-			],
-			[
-				"markdown",
-				"Markdown Preview: Preview in Browser"
-			],
-			[
-				"package",
-				"Package Control: Remove Package"
-			],
-			[
-				"instll",
-				"Package Control: Install Package"
-			],
-			[
-				"insta",
-				"Package Control: Install Package"
-			],
-			[
 				"",
-				"GitHub Flavored Markdown: Preview"
-			],
-			[
-				"mark",
-				"GitHub Flavored Markdown: Preview"
-			],
-			[
-				"packa",
-				"Preferences: Package Control Settings – Default"
-			],
-			[
-				"PackageResourceViewer",
-				"PackageResourceViewer: Open Resource"
-			],
-			[
-				"update",
-				"Package Control: Upgrade/Overwrite All Packages"
+				"Markdown Preview: Preview in Browser"
 			]
 		],
-		"width": 449.0
+		"width": 575.0
 	},
 	"console":
 	{
-		"height": 146.0,
+		"height": 126.0,
 		"history":
 		[
 			"import urllib.request,os,hashlib; h = '2915d1851351e5ee549c20394736b442' + '8bc59f460fa1548d1514676163dafc88'; pf = 'Package Control.sublime-package'; ipp = sublime.installed_packages_path(); urllib.request.install_opener( urllib.request.build_opener( urllib.request.ProxyHandler()) ); by = urllib.request.urlopen( 'http://packagecontrol.io/' + pf.replace(' ', '%20')).read(); dh = hashlib.sha256(by).hexdigest(); print('Error validating download (got %s instead of %s), please try manual install' % (dh, h)) if dh != h else open(os.path.join( ipp, pf), 'wb' ).write(by)"
@@ -118,38 +49,56 @@
 	},
 	"file_history":
 	[
-		"/home/indigo/Documents/server-status/contrast.txt",
-		"/home/indigo/Downloads/OpenVPN-setup-PIA/yes",
-		"/home/indigo/yes",
-		"/home/indigo/.config/sublime-text-3/Packages/Default/Default (Linux).sublime-keymap",
-		"/home/indigo/Documents/server-status/scripts_check.sh",
-		"/home/indigo/Documents/server-status/server_status.py",
-		"/home/indigo/Documents/server-status/battery_status.py",
-		"/home/indigo/Documents/server-status/test.md",
-		"/home/indigo/.config/sublime-text-3/Packages/User/Preferences.sublime-settings",
-		"/home/indigo/.config/sublime-text-3/Packages/Default/Preferences.sublime-settings",
-		"/home/indigo/.config/sublime-text-3/Packages/Package Control/Package Control.sublime-settings",
-		"/home/indigo/.config/sublime-text-3/Packages/GitHub Flavored Markdown Preview/GHMarkdownPreview.py",
-		"/home/indigo/.config/sublime-text-3/Packages/GitHub Flavored Markdown Preview/.editorconfig",
-		"/home/indigo/Documents/server-status/notes.md",
-		"/home/indigo/Documents/server-status/.gitignore",
-		"/home/indigo/Documents/server-status/.profile",
-		"/home/indigo/screenlog.0",
-		"/home/indigo/Downloads/rstudio-0.99.489/INSTALL",
-		"/home/indigo/.cache/.fr-AbT8u2/rstudio-0.99.489/INSTALL",
-		"/home/indigo/Downloads/rstudio-0.99.489/README.md",
-		"/usr/share/applications/defaults.list"
+		"/Users/robinedwards/Documents/MSF/Buendia/server-status/.profile.sh",
+		"/Users/robinedwards/Documents/MSF/Buendia/server-status/scripts_check.sh",
+		"/Users/robinedwards/Documents/MSF/ODK_old/SETUP/toFlash/flashall.sh",
+		"/Users/robinedwards/Documents/MSF/ODKAggregateOnEdison/installation_script/setup_edison_odk.sh",
+		"/Users/robinedwards/Documents/MSF/ODKAggregateOnEdison/installation_script/setup_edison_odk2.sh",
+		"/Volumes/NO NAME/moxier.csv",
+		"/Users/robinedwards/screenlog.mac_buendia_install.txt",
+		"/Users/robinedwards/screenlog.0",
+		"/Users/robinedwards/screenlog.1",
+		"/Users/robinedwards/Downloads/poky-feed-config-opkg-dbg_1.0-r2_edison.ipk",
+		"/Users/robinedwards/Documents/MSF/Buendia/server-status/setup/hardware_setup.md",
+		"/Users/robinedwards/Documents/MSF/Buendia/server-status/battery_status.py",
+		"/Users/robinedwards/Documents/MSF/Buendia/server-status/.gitignore",
+		"/Users/robinedwards/Documents/MSF/Buendia/server-status/server_status.py",
+		"/Users/robinedwards/Documents/MSF/Buendia/battery/battery_data.csv",
+		"/Users/robinedwards/Documents/MSF/Buendia/server-status/battery/battery_life_analysis.R",
+		"/Users/robinedwards/Documents/MSF/Buendia/server-status/setup/led_gpio_setup.md",
+		"/Users/robinedwards/Documents/MSF/Buendia/server-status/truncate_logs.sh",
+		"/Users/robinedwards/Movies/.DS_Store",
+		"/Users/robinedwards/Documents/MSF/Buendia/server-status/pwm_demo.py",
+		"/Users/robinedwards/Documents/MSF/Buendia/server-status/pwm_demo.c",
+		"/Users/robinedwards/Documents/MSF/Buendia/server-status/test_scripts/README.md",
+		"/Users/robinedwards/Documents/MSF/Buendia/server-status/README.md",
+		"/Users/robinedwards/Documents/MSF/Buendia/server-status/battery/README.md",
+		"/Users/robinedwards/Documents/MSF/Buendia/server-status/battery/battery_data.csv",
+		"/Users/robinedwards/Documents/MSF/Buendia/server-status/boot_script.sh",
+		"/Users/robinedwards/Documents/MSF/Buendia/server-status/sd/server_status_log.txt",
+		"/Users/robinedwards/Documents/MSF/Buendia/server-status/sd/battery_status_log.txt",
+		"/Users/robinedwards/Documents/MSF/Buendia/battery/battery_life_analysis.R",
+		"/Users/robinedwards/Documents/MSF/Buendia/server-status/report_failed_process.py",
+		"/Users/robinedwards/Documents/MSF/Buendia/server-status/battery_led_old.py",
+		"/Users/robinedwards/Documents/MSF/Buendia/server-status/battery_status_old.py",
+		"/Users/robinedwards/Documents/MSF/Buendia/server-status/log_charge.sh",
+		"/Users/robinedwards/Documents/MSF/Buendia/server-status/test_scripts/report_leds.py",
+		"/Users/robinedwards/Documents/MSF/Buendia/server-status/failed_server_status.py",
+		"/Users/robinedwards/Documents/MSF/Buendia/server-status/battery_led.py",
+		"/tmp/subl stdin 4LvZ5L.txt",
+		"/tmp/subl stdin YRpwL2.txt",
+		"/Users/robinedwards/Desktop/TrueCrypt 7.1a.mpkg/Contents/distribution.dist",
+		"/Volumes/TrueCrypt 7.1a/TrueCrypt 7.1a.mpkg/Contents/distribution.dist"
 	],
 	"find":
 	{
-		"height": 35.0
+		"height": 23.0
 	},
 	"find_in_files":
 	{
-		"height": 93.0,
+		"height": 0.0,
 		"where_history":
 		[
-			""
 		]
 	},
 	"find_state":
@@ -157,11 +106,44 @@
 		"case_sensitive": false,
 		"find_history":
 		[
-			"font",
-			"thread",
-			"Thread",
+			"dnsmasq",
+			"dns",
+			"santan",
+			"\\x00",
+			"0x15",
+			"0x18",
+			"\\x00",
+			"NUL",
+			"[[36minfo[39;49m] Will now restart.",
 			"flash_colours",
-			"gedit"
+			"led",
+			"period",
+			"flash_col",
+			"flash_colours",
+			"stateOfCharge",
+			"get_battery_status",
+			"verifi",
+			"black",
+			"verif",
+			"openmrs_int change: -1 > 3",
+			"sys.",
+			"/home/root/d",
+			"[",
+			"sd/",
+			"sd",
+			"get_battery_status",
+			"bat2",
+			"bat1",
+			"quickStart",
+			"reset",
+			"classify_status",
+			"new_status",
+			"light",
+			"int(",
+			"light",
+			"math",
+			"quali",
+			"seed"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -169,7 +151,7 @@
 		"regex": false,
 		"replace_history":
 		[
-			"sublime_text"
+			""
 		],
 		"reverse": false,
 		"show_context": true,
@@ -180,131 +162,14 @@
 	"groups":
 	[
 		{
-			"selected": 0,
 			"sheets":
 			[
-				{
-					"buffer": 0,
-					"file": "server_status.py",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 6334,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								784,
-								784
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Python/Python.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": -0.0,
-						"translation.y": 306.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 0,
-					"type": "text"
-				},
-				{
-					"buffer": 1,
-					"file": "lcd_dev.py",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 1206,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								323,
-								323
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Python/Python.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 1,
-					"type": "text"
-				},
-				{
-					"buffer": 2,
-					"file": "thread_test.py",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 92,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								92,
-								92
-							]
-						],
-						"settings":
-						{
-							"auto_name": "import threading",
-							"syntax": "Packages/Python/Python.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 3,
-					"type": "text"
-				},
-				{
-					"buffer": 3,
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 472,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								472,
-								472
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Python/Python.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 2,
-					"type": "text"
-				}
 			]
 		}
 	],
 	"incremental_find":
 	{
-		"height": 25.0
+		"height": 23.0
 	},
 	"input":
 	{
@@ -337,11 +202,15 @@
 	{
 		"height": 0.0
 	},
+	"output.markdown":
+	{
+		"height": 100.0
+	},
 	"pinned_build_system": "",
-	"project": "server-status.sublime-workspace",
+	"project": "server-status.sublime-project",
 	"replace":
 	{
-		"height": 64.0
+		"height": 42.0
 	},
 	"save_all_on_build": true,
 	"select_file":
@@ -379,7 +248,7 @@
 	"show_open_files": false,
 	"show_tabs": true,
 	"side_bar_visible": true,
-	"side_bar_width": 194.0,
+	"side_bar_width": 232.0,
 	"status_bar_visible": true,
 	"template_settings":
 	{

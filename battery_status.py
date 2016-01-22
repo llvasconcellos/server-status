@@ -88,9 +88,10 @@ while True:
   subprocess.call('echo ' + str(int(charge+.5)) + ' > battery_charge.txt', shell=True)
   subprocess.call('cp battery_charge.txt /home/root/debian/home/buendia/battery_charge.txt', shell=True)
   if k == 0:
-    subprocess.call('cat battery_charge.txt >> sd/battery_charge_log.txt', shell=True)
+    try:
+      subprocess.call('cat battery_charge.txt >> sd/battery_charge_log.txt', shell=True)
   k = (k + 1) % 60 # i.e. every 10 mins
-
+  
   if charge <= 5 and not charge == 0: # exception for e.g. disconnected fuel gauge wire
     print "Emergency shutdown: battery=" + str(charge) + "%"
     subprocess.call('echo 1 > /home/root/debian/home/buendia/battery_shutdown.txt', shell=True)

@@ -28,11 +28,11 @@ last_check = time.time()
 last_led_check = time.time()
 
 # Edison software SPI config:
-SCLK = 10
-DIN = 11
-DC = 32
-RST = 46
-CS = 23
+SCLK = 35 # 10
+DIN  = 26 # 11
+DC   = 25 # 32
+RST  = 45 # 46
+CS   = 31 # 23
 #disp = LCD.PCD8544(DC, RST, SCLK, DIN, CS)
 font = ImageFont.truetype('fonts/Minecraftia-Regular.ttf', 8)
 
