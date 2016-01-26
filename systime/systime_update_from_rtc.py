@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 
-#import sys
+# Update system time from RTC - to run on boot
+
 import time
-#import datetime
 import SDL_DS1307
 import os
 

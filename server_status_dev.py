@@ -12,7 +12,6 @@ from PIL import Image
 from PIL import ImageFont
 from PIL import ImageDraw
 from re import sub
-import multiprocessing
 
 os.chdir('/home/root/gpio')
 print time.strftime('%X') + " START"
@@ -28,6 +27,8 @@ openmrs_url = 'localhost:9000/openmrs/index.htm'
 
 last_check = time.time()
 last_led_check = time.time()
+current_lines = []
+report_stats = ['test stat 1', 'test stat 2', 'test stat 3', 'test stat 4', 'test stat 5', 'test stat 6']
 
 # Edison software SPI config:
 SCLK = 35 # 10
@@ -35,8 +36,11 @@ DIN  = 26 # 11
 DC   = 25 # 32
 RST  = 45 # 46
 CS   = 31 # 23
-#disp = LCD.PCD8544(DC, RST, SCLK, DIN, CS)
 font = ImageFont.truetype('fonts/Minecraftia-Regular.ttf', 8)
+
+# LCD contrast setting
+with open('contrast.txt', "r") as f:
+  contrast = int(sub('\\n', '', f.read()))
 
 # new line positions
 h = [-2,6,14,22,30,38]
@@ -47,45 +51,39 @@ subprocess.call('echo -1 > /home/root/debian/home/buendia/server_status.txt', sh
 
 ## FUNCTIONS
 
-# Report lines to LCD
-class LCDProcessClass(multiprocessing.Process):
-  def __init__(self, lines):
-    self.lines = lines
-    super(LCDProcessClass, self).__init__()
-  def run(self):
-    with open('contrast.txt', "r") as f:
-      contrast = int(sub('\\n', '', f.read()))
-    disp = LCD.PCD8544(DC, RST, SCLK, DIN, CS)
-    disp.begin(contrast = contrast)
-    image = Image.new('1', (LCD.LCDWIDTH, LCD.LCDHEIGHT))
-    draw = ImageDraw.Draw(image)
-    draw.rectangle((0,0,LCD.LCDWIDTH,LCD.LCDHEIGHT), outline=255, fill=255)
-    for i, line in enumerate(self.lines):
-      if i < 5:
-        draw.text((0, h[i]), line, font=font)
-    # Battery bar
-    Y = 40    # vertical position
-    with open('battery_charge.txt', "r") as f:
-      charge_val = int(f.read())
-    charge = int(50 * (float(charge_val) / 100))
-    draw.polygon([(0,1+Y), (2,1+Y), (2,0+Y), (4,0+Y), (4,1+Y), (6,1+Y), (6,7+Y), (0,7+Y)], outline=0, fill=255)
-    if charge_val == 101:
-      draw.text((12,Y-1), 'wait..', font=font)
-    elif charge_val == 0:
-      draw.text((12,Y-1), 'not reporting', font=font)
-    else:
-      draw.text((61,Y-1), str(charge_val) + '%', font=font)
-      draw.rectangle((9, Y+1, 9+50, 7+Y), outline=0, fill=255)
-      draw.rectangle((9, Y+1, 9+charge, 7+Y), outline=0, fill=0)
-    disp.image(image)
-    disp.display()
-
 # LCD process handler
 def report_lcd(lines):
-  global lcd
-  lcd.terminate()
-  lcd = LCDProcessClass(lines)
-  lcd.start()
+  global current_lines
+  global report_stats
+  current_lines = lines
+  disp = LCD.PCD8544(DC, RST, SCLK, DIN, CS)
+  disp.begin(contrast = contrast)
+  image = Image.new('1', (LCD.LCDWIDTH, LCD.LCDHEIGHT))
+  draw = ImageDraw.Draw(image)
+  draw.rectangle((0,0,LCD.LCDWIDTH,LCD.LCDHEIGHT), outline=255, fill=255)
+  if lines[0] == 'SYSTEM O.K.':
+    lines = lines + report_stats
+  for i, line in enumerate(lines):
+    if i < 5:
+      draw.text((0, h[i]), line, font=font)
+  # Battery bar
+  Y = 40    # vertical position
+  with open('battery_charge.txt', "r") as f:
+    charge_val = int(f.read())
+  charge = int(50 * (float(charge_val) / 100))
+  draw.polygon([(0,1+Y), (2,1+Y), (2,0+Y), (4,0+Y), (4,1+Y), (6,1+Y), (6,7+Y), (0,7+Y)], outline=0, fill=255)
+  if charge_val == 101:
+    draw.text((12,Y-1), 'wait..', font=font)
+  elif charge_val == 0:
+    draw.text((12,Y-1), 'no batt data', font=font)
+  else:
+    draw.text((61,Y-1), str(charge_val) + '%', font=font)
+    draw.rectangle((9, Y+1, 9+50, 7+Y), outline=0, fill=255)
+    draw.rectangle((9, Y+1, 9+charge, 7+Y), outline=0, fill=0)
+  # render
+  disp.image(image)
+  disp.display()
+
 
 # Returns next line number (debugging)
 def report(msg=''):
@@ -108,21 +106,21 @@ def openmrs_internal_status():
     openmrs_int = openmrs_int_new
     ## REPORT NEW STATUS
     if openmrs_int == 0:                 # down (Not implemented)
-      report_lcd(['--SYSTEM DOWN--'])
+      report_lcd(['-SYSTEM DOWN-'])
     elif openmrs_int == 1:               # normal use
       report_lcd(['SYSTEM O.K.'])
     elif openmrs_int == 2:               # back-up: started
-      report_lcd(['--START BACKUP--'])
+      report_lcd(['-START BACKUP-'])
     elif openmrs_int == 3:               # back-up: processing
-      report_lcd(['--BACKING UP--'])
+      report_lcd(['-BACKING UP-'])
     elif openmrs_int == 4:               # back-up: failed
-      report_lcd(['--BACKUP FAILED--'])
+      report_lcd(['-BACKUP FAILED-'])
     elif openmrs_int == 5:               # update: checking (Not implemented)
-      report_lcd(['--START UPDATE--'])
+      report_lcd(['-START UPDATE-'])
     elif openmrs_int == 6:               # update: updating (Not implemented)
-      report_lcd(['--UPDATING--'])
+      report_lcd(['-UPDATING-'])
     elif openmrs_int == 7:               # update: failed (Not implemented)
-      report_lcd(['--UPDATE FAILED--'])
+      report_lcd(['-UPDATE FAILED-'])
 
 # classify server repsonses - i.e. interpret top line of 'curl -Is <url>'
 def check_url(url):
@@ -163,9 +161,7 @@ def check_url(url):
 #       yes - has OpenMRS stopped responding to ping?
 #         yes - report
 
-lcd = LCDProcessClass(['SYSTEM BOOTING']) # initialise
-lcd.start()
-time.sleep(8)
+report_lcd(['SYSTEM BOOTING']) # initialise
 
 print '*** START MAIN LOOP ***'
 
@@ -202,5 +198,15 @@ while True:
           openmrs_ext = 0
           report()
           report_lcd(['OPENMRS DOWN','at ' + time.strftime("%H:%M", time.gmtime()) + 'OpenMRS', 'down: wait 10 min &','Reboot if not up.','See syslog.'])
+        else:
+          report_lcd(current_lines)             # repeat current screen in case LCD has lost it
+  # change contrast
+  with open('contrast.txt', "r") as f:
+    contrast_new = int(sub('\\contrastn', '', f.read()))
+    if contrast_new != contrast:
+      disp = LCD.PCD8544(DC, RST, SCLK, DIN, CS)
+      disp.begin(contrast = contrast)
+      contrast = contrast_new
   sys.stdout.flush()                            # output to file now
   time.sleep(1)
+

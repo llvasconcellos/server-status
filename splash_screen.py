@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import Adafruit_Nokia_LCD as LCD
 import Adafruit_GPIO.SPI as SPI
 from PIL import Image
@@ -6,11 +8,12 @@ from PIL import ImageDraw
 from re import sub
 
 # Edison software SPI config:
-SCLK = 10
-DIN = 11
-DC = 32
-RST = 46
-CS = 23
+SCLK = 35 # 10
+DIN  = 26 # 11
+DC   = 25 # 32
+RST  = 45 # 46
+CS   = 31 # 23
+
 disp = LCD.PCD8544(DC, RST, SCLK, DIN, CS)
 
 with open('contrast.txt', "r") as f:

@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# Runs in background to assess if LED scripts are working properly
+# Runs in background to assess if server/battery status reporting scripts are working properly
 # Creates/kills instances of report_failed_process.py to report failures
 
 cd /home/root/gpio
@@ -13,19 +13,19 @@ while true; do
 	batt_lines=$(echo "$prs" | grep battery_status.py | grep -v grep);
 	serv_lines=$(echo "$prs" | grep server_status.py | grep -v grep);
 	
-	# Have any LED scripts failed? These lines count process lines
+	# Have any scripts failed? These lines count process lines
 	batt=$(echo "$batt_lines" | sed '/^\s*$/d' | wc -l);  # sed to ignore empty lines
 	serv=$(echo "$serv_lines" | sed '/^\s*$/d' | wc -l);
 
 	# kill any excess script instances
-	[ $batt -gt 1 ] && for i in $(seq $(expr $batt - 1)); do kill $(echo "$batt_lines" | sed -n $i'p' | grep -oE '[0-9]+' | head -n 1); echo duplicate process killed >> sd/battery_status_log.txt; done
-	[ $serv -gt 1 ] && for i in $(seq $(expr $serv - 1)); do kill $(echo "$serv_lines" | sed -n $i'p' | grep -oE '[0-9]+' | head -n 1); echo duplicate process killed >> sd/server_status_log.txt; done 
+	# [ $batt -gt 1 ] && for i in $(seq $(expr $batt - 1)); do kill $(echo "$batt_lines" | sed -n $i'p' | grep -oE '[0-9]+' | head -n 1); echo duplicate process killed >> sd/battery_status_log.txt; done
+	# [ $serv -gt 1 ] && for i in $(seq $(expr $serv - 1)); do kill $(echo "$serv_lines" | sed -n $i'p' | grep -oE '[0-9]+' | head -n 1); echo duplicate process killed >> sd/server_status_log.txt; done 
 
 	# count active failed-script reporting scripts
 	failbatt=$(echo "$prs" | grep "report_failed_process.py battery" | grep -v grep | sed '/^\s*$/d' | wc -l);
 	failserv=$(echo "$prs" | grep "report_failed_process.py server" | grep -v grep | sed '/^\s*$/d' | wc -l);
 
-	# Report failures to LED if new
+	# Report failures to LCD if new
 	[ $batt == 0 ] && [ $failbatt == 0 ] && echo 'battery failed' && python report_failed_process.py battery &
 	[ $serv == 0 ] && [ $failserv == 0 ] && echo 'server failed' && python report_failed_process.py server & 
 

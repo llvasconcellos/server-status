@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import mraa
 import time
 import sys

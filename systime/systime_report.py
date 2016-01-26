@@ -1,10 +1,9 @@
 #!/usr/bin/env python
 
-#import sys
+# Report system and RTC times
+
 import time
-#import datetime
 import SDL_DS1307
-#import os
 
 ds1307 = SDL_DS1307.SDL_DS1307(1, 0x68)
 now = ds1307.read_datetime()

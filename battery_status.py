@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import os
 import time
 import mraa
@@ -89,10 +91,10 @@ while True:
   subprocess.call('cp battery_charge.txt /home/root/debian/home/buendia/battery_charge.txt', shell=True)
   if k == 0:
     try:
-      subprocess.call('cat battery_charge.txt >> sd/battery_charge_log.txt', shell=True)
+      subprocess.call('cat battery_charge.txt >> sd/logs/battery_charge_log.txt', shell=True)
   k = (k + 1) % 60 # i.e. every 10 mins
   
-  if charge <= 5 and not charge == 0: # exception for e.g. disconnected fuel gauge wire
+  if charge <= 5 and not charge < 1: # exception for e.g. disconnected fuel gauge wire
     print "Emergency shutdown: battery=" + str(charge) + "%"
     subprocess.call('echo 1 > /home/root/debian/home/buendia/battery_shutdown.txt', shell=True)
     time.sleep(30)  # time for server to alert tablets

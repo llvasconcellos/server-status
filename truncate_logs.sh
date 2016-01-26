@@ -2,7 +2,7 @@
 
 # Every 6 hours truncate the main log files on SD card to 5000 lines
 
-cd /home/root/gpio/sd
+cd /home/root/gpio/sd/logs
 
 echo "system reboot" >> battery_status_log.txt
 echo "system reboot" >> server_status_log.txt
