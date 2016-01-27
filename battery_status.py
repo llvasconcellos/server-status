@@ -92,6 +92,8 @@ while True:
   if k == 0:
     try:
       subprocess.call('cat battery_charge.txt >> sd/logs/battery_charge_log.txt', shell=True)
+    except:
+      print 'Cannot write to sd/logs/battery_charge_log.txt'
   k = (k + 1) % 60 # i.e. every 10 mins
   
   if charge <= 5 and not charge < 1: # exception for e.g. disconnected fuel gauge wire

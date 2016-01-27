@@ -21,7 +21,8 @@
     src/gz core2-32 http://repo.opkg.net/edison/repo/core2-32" > /etc/opkg/base-feeds.conf
     
     opkg update
-    opkg install libmraa0 git python-smbus # flex bison
+    opkg install libmraa0 git python-smbus nano
+    echo set const >> ~/.nanorc  # so nano reports line number
 
     cd /home/root
     git clone --recursive https://github.com/geotheory/server-status
