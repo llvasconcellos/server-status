@@ -12,12 +12,14 @@
 #### Setup repos and libraries
 
     echo "src mraa-upm http://iotdk.intel.com/repos/1.1/intelgalactic" > /etc/opkg/mraa-upm.conf
+
     echo "src all     http://iotdk.intel.com/repos/1.1/iotdk/all
     src x86 http://iotdk.intel.com/repos/1.1/iotdk/x86
     src i586    http://iotdk.intel.com/repos/1.1/iotdk/i586
     src/gz all http://repo.opkg.net/edison/repo/all
     src/gz edison http://repo.opkg.net/edison/repo/edison
     src/gz core2-32 http://repo.opkg.net/edison/repo/core2-32" > /etc/opkg/base-feeds.conf
+    
     opkg update
     opkg install libmraa0 git python-smbus # flex bison
 
