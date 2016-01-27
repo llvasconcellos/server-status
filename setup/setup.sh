@@ -45,7 +45,7 @@ python systime/systime_set_rtc.py
 mkdir -p /debian/home/buendia/sd
 ln -s /debian/home/buendia/sd /home/root/gpio/sd
 touch sd/sd_not_mounted
-mount /dev/xxx /debian/home/buendia/sd/ && touch xxx &
+mount /dev/mmcblk1p1 /debian/home/buendia/sd/ && touch sd/sd_mounted &
 
 #### Boot script
 
