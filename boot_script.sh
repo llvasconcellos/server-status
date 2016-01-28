@@ -12,7 +12,7 @@ mkdir -p sd/logs
 echo $(date) >> boot_script_log.txt
 
 # update system time from RTC
-python systime/systime_update_from_rtc.py > sd/logs/rtc_log.txt 2>&1 &
+python systime/set_edison_from_rtc > sd/logs/rtc_log.txt 2>&1 &
 
 # splash screen
 python splash_screen.py &
