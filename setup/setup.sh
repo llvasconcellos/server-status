@@ -13,6 +13,8 @@
 
 #### Setup repos and libraries
 
+echo '1/6: UPDATE REPOS AND INSTALLING DEPENDENCIES'
+
 echo "src mraa-upm http://iotdk.intel.com/repos/1.1/intelgalactic" > /etc/opkg/mraa-upm.conf
 
 echo "src all     http://iotdk.intel.com/repos/1.1/iotdk/all
@@ -26,11 +28,13 @@ opkg update
 opkg install libmraa0 git python-smbus nano
 echo set const >> ~/.nanorc  # so nano reports line number
 
+echo '2/6: CLONE SERVER-STATUS REPO'
 cd /home/root
 git clone --recursive https://github.com/geotheory/server-status
 mv server-status gpio
 chmod -R 755 gpio
 
+echo '3/6: INSTALL LCD & GPIO PYTHON LIBS'
 cd gpio/libraries/Adafruit_Nokia_LCD
 python setup.py install
 cd ../Adafruit_Python_GPIO
@@ -38,17 +42,18 @@ python setup.py install
 cd /home/root/gpio
 
 #### set RTC time
+echo '4/6: SET R.T.C. TIME'
 python systime/systime_set_rtc.py
 
 #### SD card 
-
+echo '5/6: MOUNT S.D. CARD'
 mkdir -p /debian/home/buendia/sd
 ln -s /debian/home/buendia/sd /home/root/gpio/sd
 touch sd/sd_not_mounted
 mount /dev/mmcblk1p1 /debian/home/buendia/sd/ && touch sd/sd_mounted &
 
 #### Boot script
-
+echo '5/6: SET UP BOOT SCRIPT'
 mkdir /etc/init.d
 cd /etc/init.d
 cp /home/root/gpio/boot_script.sh ./
