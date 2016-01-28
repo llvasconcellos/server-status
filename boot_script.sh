@@ -26,6 +26,9 @@ echo 101 > battery_charge.txt  # reset status file
 #sleep 15 # sleep briefly to allow default UART pin boot sequence to finish (a bug workaround)
 python battery_status.py >> sd/logs/battery_status_log.txt 2>&1 &
 
+# SHUTDOWN BUTTON
+python button_shutdown.py >> /dev/null 2>&1 &
+
 # OTHER SCRIPTS
 
 # monitor scripts
