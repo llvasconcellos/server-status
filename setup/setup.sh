@@ -47,7 +47,7 @@ python systime/systime_set_rtc.py
 
 #### SD card 
 echo '5/6: MOUNT S.D. CARD'
-mkdir -p /debian/home/buendia/sd
+mkdir -p /debian/home/buendia/sd/logs
 ln -s /debian/home/buendia/sd /home/root/gpio/sd
 touch sd/sd_not_mounted
 mount /dev/mmcblk1p1 /debian/home/buendia/sd/ && touch sd/sd_mounted &
