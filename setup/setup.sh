@@ -43,7 +43,7 @@ cd /home/root/gpio
 
 #### set RTC time
 echo '4/6: SET R.T.C. TIME'
-python systime/systime_set_rtc.py
+python systime/set_rtc_from_edison.py
 
 #### SD card 
 echo '5/6: MOUNT S.D. CARD'
