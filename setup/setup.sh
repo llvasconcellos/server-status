@@ -30,7 +30,7 @@ echo set const >> ~/.nanorc  # so nano reports line number
 
 echo '2/6: CLONE SERVER-STATUS REPO'
 cd /home/root
-git clone --recursive https://github.com/geotheory/server-status
+git clone https://github.com/geotheory/server-status
 mv server-status gpio
 chmod -R 755 gpio
 
