@@ -2,6 +2,7 @@
 
 import mraa
 import time
+import subprocess
 
 pressed = False
 
@@ -20,6 +21,7 @@ def press(args):
     time.sleep(.25)
     if i == 40:
       print 'Powering down..'
+      subprocess.call("python /home/root/gpio/lcd/report_lines.py 'Shutting down' 'Wait 2 minutes,' 'then flick the' 'power switch.' 'Au revoir!'", shell=True)
       pressed = False
       return
   pressed = False
