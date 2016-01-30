@@ -55,3 +55,13 @@ docs/_build/
 
 # PyBuilder
 target/
+
+# temporary hold
+notes.md
+buendia.sublime-project
+server-status.sublime-workspace
+server-status.sublime-project
+hardware_check.txt
+battery/battery_data.csv
+battery/battery_analysis_plot.pdf
+
