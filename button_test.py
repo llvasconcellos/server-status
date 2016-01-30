@@ -19,7 +19,7 @@ def press(args):
   while pin.read() == 0:
     i += 1
     time.sleep(.25)
-    if i == 40:
+    if i == 50:
       print 'Powering down..'
       subprocess.call("python /home/root/gpio/lcd/report_lines.py 'Shutting down' 'Wait 2 minutes,' 'then flick the' 'power switch.' 'Au revoir!'", shell=True)
       pressed = False

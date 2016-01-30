@@ -15,10 +15,10 @@ disp = LCD.PCD8544(DC, RST, SCLK, DIN, CS)
 
 if len(sys.argv) > 1:
   contrast = int(sys.argv[1])
-  with open('contrast.txt', "w") as f:
+  with open('/home/root/gpio/contrast.txt', "w") as f:
     f.write(str(contrast))
 else:
-  with open('contrast.txt', "r") as f:
+  with open('/home/root/gpio/contrast.txt', "r") as f:
     contrast = int(sub('\\n', '', f.read()))
 
 disp.begin(contrast = contrast)
