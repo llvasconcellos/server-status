@@ -27,7 +27,7 @@ def press(args):
   pressed = False
 
 while True:
-  pin = mraa.Gpio(13)
+  pin = mraa.Gpio(32)
   pin.dir(mraa.DIR_IN)
   pin.isr(mraa.EDGE_BOTH, press, press)
   time.sleep(10800)
