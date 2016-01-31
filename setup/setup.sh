@@ -1,6 +1,7 @@
 #!/bin/sh
 
 ## Buendia Yocto setup script
+## Use this when setting up a freshly flashed Edison
 
 #### Connect to internet
 
@@ -47,14 +48,15 @@ python systime/set_rtc_from_edison.py
 
 #### SD card 
 echo '5/6: MOUNT S.D. CARD'
-mkdir -p /debian/home/buendia/sd/logs
+mkdir -p /debian/home/buendia/sd/logs   # in case SD fails sometime
 ln -s /debian/home/buendia/sd /home/root/gpio/sd
 touch sd/sd_not_mounted
 mount /dev/mmcblk1p1 /debian/home/buendia/sd/ && touch sd/sd_mounted &
+mkdir -p /debian/home/buendia/sd/logs
 
 #### Boot script
 echo '5/6: SET UP BOOT SCRIPT'
-mkdir /etc/init.d
+mkdir -p /etc/init.d
 cd /etc/init.d
 cp /home/root/gpio/boot_script.sh ./
 
