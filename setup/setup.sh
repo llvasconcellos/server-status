@@ -1,9 +1,9 @@
 #!/bin/sh
 
 ## Buendia Yocto setup script
-## Use this when setting up a freshly flashed Edison
+## Use this when manually setting up a freshly flashed Edison
 
-#### Connect to internet
+#### To connect to internet if necessary
 
 # echo "NETWORKING_AP=0
 # NETWORKING_DHCP_DNS_SERVER=0
