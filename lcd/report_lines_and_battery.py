@@ -6,8 +6,10 @@ from PIL import Image
 from PIL import ImageFont
 from PIL import ImageDraw
 import sys
-from random import shuffle
 from re import sub
+import os
+
+os.chdir('/home/root/gpio')
 
 # Edison software SPI config:
 SCLK = 35 # 10
@@ -36,17 +38,18 @@ draw = ImageDraw.Draw(image)
 draw.rectangle((0,0,LCD.LCDWIDTH,LCD.LCDHEIGHT), outline=255, fill=255)
 
 # report lines
-n = min(5, len(sys.argv)-2)
+n = min(5, len(sys.argv)-1)
 for i in range(n):
-  draw.text((0,h[i]+0), sys.argv[i+2], font=font)
+  draw.text((0,h[i]+0), sys.argv[i+1], font=font)
 
 # Battery bar
 ind = 9
 Y = 40
-charge_val = int(sys.argv[1])
+with open('battery_charge.txt', "r") as f:
+  charge_val = int(f.read())
 charge = int(50 * (float(charge_val) / 100))
 
-draw.polygon([(0,1+Y), (2,1+Y), (2,0+Y), (4,0+Y), (4,1+Y), (6,1+Y), (6,7+Y), (0,
+draw.polygon([(0,1+Y), (2,1+Y), (2,0+Y), (4,0+Y), (4,1+Y), (6,1+Y), (6,7+Y), (0,7+Y)], outline=0, fill=255)
 draw.text((61,Y-1), str(charge_val) + '%', font=font)
 draw.rectangle((ind,Y+1,ind+50,7+Y), outline=0, fill=255)
 draw.rectangle((ind,Y+1,ind+charge,7+Y), outline=0, fill=0)

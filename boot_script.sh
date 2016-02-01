@@ -5,6 +5,12 @@ echo 0 > /home/root/debian/home/buendia/battery_shutdown.txt
 
 cd /home/root/gpio
 
+mkdir -p sd/logs   # in case absent
+touch sd/logs/server_status_log.txt
+touch sd/logs/battery_status_log.txt
+touch sd/logs/battery_charge_log.txt
+touch sd/logs/scripts_check_log.txt
+
 # mount SD, test it is writable, and if not unmount
 mount /dev/mmcblk1p1 /home/root/debian/home/buendia/sd/ || touch sd_mount_failed
 touch sd/write_test && rm sd/write_test || umount -l /dev/mmcblk1p1
@@ -33,12 +39,7 @@ python button_shutdown.py >> /dev/null 2>&1 &
 
 # monitor scripts
 #sleep 20
-#. scripts_check.sh >> sd/scripts_check_log.txt 2>&1 &
-
-# prevent truncate errors from any missing files
-touch sd/logs/server_status_log.txt
-touch sd/logs/battery_status_log.txt
-touch sd/logs/battery_charge_log.txt
+#. scripts_check.sh >> sd/logs/scripts_check_log.txt 2>&1 &
 
 # truncate log files
 . truncate_logs.sh  >> /dev/null 2>&1 &
