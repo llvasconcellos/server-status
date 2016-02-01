@@ -28,6 +28,8 @@ openmrs_url = 'localhost:9000/openmrs/index.htm'
 last_check = time.time()
 last_led_check = time.time()
 
+current_lcd_lines = []
+
 # Edison software SPI config:
 SCLK = 35 # 10
 DIN  = 26 # 11
@@ -48,6 +50,8 @@ subprocess.call('echo -1 > /home/root/debian/home/buendia/server_status.txt', sh
 
 # Report lines to LCD
 def report_lcd(lines):
+  global current_lcd_lines
+  current_lcd_lines = lines
   with open('contrast.txt', "r") as f:
     contrast = int(sub('\\n', '', f.read()))
   disp = LCD.PCD8544(DC, RST, SCLK, DIN, CS)
@@ -185,6 +189,7 @@ while True:
         openmrs_internal_status()
       else:                                     # a minute has passed
         report('minute check')
+        report_lcd(current_lcd_lines)           # refresh LCD for battery level
         openmrs_status = check_url(openmrs_url) # ping OpenMRS again
         openmrs_new = openmrs_status[0]
         if openmrs_new == 0:                    # cannot detect OpenMRS anymore
