@@ -102,14 +102,15 @@ while True:
     time.sleep(30)  # time for server to alert tablets
     subprocess.call('poweroff', shell=True)
   
+  time.sleep(10)
   # light/flash RED LED when battery low
-  if charge > 50:
-    red.write(0)
-    time.sleep(snooze)
-  elif charge > 25:
-    red.write(1)
-    time.sleep(snooze)
-  else:
-    flash_led(red, snooze, float(charge)/30)
+  # if charge > 50:
+  #   red.write(0)
+  #   time.sleep(snooze)
+  # elif charge > 25:
+  #   red.write(1)
+  #   time.sleep(snooze)
+  # else:
+  #   flash_led(red, snooze, float(charge)/30)
   # any output to file now
   sys.stdout.flush()
