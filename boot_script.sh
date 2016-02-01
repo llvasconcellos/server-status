@@ -38,11 +38,11 @@ python button_shutdown.py >> /dev/null 2>&1 &
 # OTHER SCRIPTS
 
 # monitor scripts
-#sleep 20
-#. scripts_check.sh >> sd/logs/scripts_check_log.txt 2>&1 &
+sleep 20
+./scripts_check.sh >> sd/logs/scripts_check_log.txt 2>&1 &
 
 # truncate log files
-. truncate_logs.sh  >> /dev/null 2>&1 &
+./truncate_logs.sh  >> /dev/null 2>&1 &
 
 # truncate battery log
 truncate() { tail -$2 $1 > $1.tmp; cat $1.tmp > $1; rm $1.tmp; }
