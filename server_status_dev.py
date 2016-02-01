@@ -27,8 +27,6 @@ openmrs_url = 'localhost:9000/openmrs/index.htm'
 
 last_check = time.time()
 last_led_check = time.time()
-current_lines = []
-report_stats = ['test stat 1', 'test stat 2', 'test stat 3', 'test stat 4', 'test stat 5', 'test stat 6']
 
 # Edison software SPI config:
 SCLK = 35 # 10
@@ -36,11 +34,8 @@ DIN  = 26 # 11
 DC   = 25 # 32
 RST  = 45 # 46
 CS   = 31 # 23
-font = ImageFont.truetype('fonts/Minecraftia-Regular.ttf', 8)
 
-# LCD contrast setting
-with open('contrast.txt', "r") as f:
-  contrast = int(sub('\\n', '', f.read()))
+font = ImageFont.truetype('fonts/Minecraftia-Regular.ttf', 8)
 
 # new line positions
 h = [-2,6,14,22,30,38]
@@ -51,18 +46,15 @@ subprocess.call('echo -1 > /home/root/debian/home/buendia/server_status.txt', sh
 
 ## FUNCTIONS
 
-# LCD process handler
+# Report lines to LCD
 def report_lcd(lines):
-  global current_lines
-  global report_stats
-  current_lines = lines
+  with open('contrast.txt', "r") as f:
+    contrast = int(sub('\\n', '', f.read()))
   disp = LCD.PCD8544(DC, RST, SCLK, DIN, CS)
   disp.begin(contrast = contrast)
   image = Image.new('1', (LCD.LCDWIDTH, LCD.LCDHEIGHT))
   draw = ImageDraw.Draw(image)
   draw.rectangle((0,0,LCD.LCDWIDTH,LCD.LCDHEIGHT), outline=255, fill=255)
-  if lines[0] == 'SYSTEM O.K.':
-    lines = lines + report_stats
   for i, line in enumerate(lines):
     if i < 5:
       draw.text((0, h[i]), line, font=font)
@@ -75,15 +67,13 @@ def report_lcd(lines):
   if charge_val == 101:
     draw.text((12,Y-1), 'wait..', font=font)
   elif charge_val == 0:
-    draw.text((12,Y-1), 'no batt data', font=font)
+    draw.text((12,Y-1), 'not reporting', font=font)
   else:
     draw.text((61,Y-1), str(charge_val) + '%', font=font)
     draw.rectangle((9, Y+1, 9+50, 7+Y), outline=0, fill=255)
     draw.rectangle((9, Y+1, 9+charge, 7+Y), outline=0, fill=0)
-  # render
   disp.image(image)
   disp.display()
-
 
 # Returns next line number (debugging)
 def report(msg=''):
@@ -105,22 +95,26 @@ def openmrs_internal_status():
     report('openmrs_int change: ' + str(openmrs_int) + ' > ' + str(openmrs_int_new))
     openmrs_int = openmrs_int_new
     ## REPORT NEW STATUS
-    if openmrs_int == 0:                 # down (Not implemented)
-      report_lcd(['-SYSTEM DOWN-'])
-    elif openmrs_int == 1:               # normal use
-      report_lcd(['SYSTEM O.K.'])
-    elif openmrs_int == 2:               # back-up: started
-      report_lcd(['-START BACKUP-'])
-    elif openmrs_int == 3:               # back-up: processing
-      report_lcd(['-BACKING UP-'])
-    elif openmrs_int == 4:               # back-up: failed
-      report_lcd(['-BACKUP FAILED-'])
-    elif openmrs_int == 5:               # update: checking (Not implemented)
-      report_lcd(['-START UPDATE-'])
-    elif openmrs_int == 6:               # update: updating (Not implemented)
-      report_lcd(['-UPDATING-'])
-    elif openmrs_int == 7:               # update: failed (Not implemented)
-      report_lcd(['-UPDATE FAILED-'])
+    if openmrs_int == 0:                 # 0 = down (Not implemented)
+      report_lcd(['SYSTEM DOWN'])
+    elif openmrs_int == 1:               # 1 = normal use
+      report_lcd(['System OK'])
+    elif openmrs_int == 2:               # 2 = back-up internally: processing
+      report_lcd(['Backing up (SD)...'])
+    elif openmrs_int == 3:               # 3 = back-up to USB: processing
+      report_lcd(['Backing up (USB)...'])
+    elif openmrs_int == 4:               # 4 = back-up: failed
+      report_lcd(['BACKUP FAILED'])
+    elif openmrs_int == 5:               # 5 = restoring from backup
+      report_lcd(['Restoring...'])
+    elif openmrs_int == 6:               # 6 = restore failed
+      report_lcd(['RESTORE FAILED'])
+    elif openmrs_int == 7:               # 7 = updating
+      report_lcd(['Updating...'])
+    elif openmrs_int == 8:               # 8 = update failed
+      report_lcd(['UPDATE FAILED'])
+    elif openmrs_int == 2001:            # 2001 = open the pod bay doors
+      report_lcd(['I\'m sorry, Dave'])
 
 # classify server repsonses - i.e. interpret top line of 'curl -Is <url>'
 def check_url(url):
@@ -161,7 +155,7 @@ def check_url(url):
 #       yes - has OpenMRS stopped responding to ping?
 #         yes - report
 
-report_lcd(['SYSTEM BOOTING']) # initialise
+report_lcd(['SYSTEM BOOTING'])
 
 print '*** START MAIN LOOP ***'
 
@@ -198,15 +192,6 @@ while True:
           openmrs_ext = 0
           report()
           report_lcd(['OPENMRS DOWN','at ' + time.strftime("%H:%M", time.gmtime()) + 'OpenMRS', 'down: wait 10 min &','Reboot if not up.','See syslog.'])
-        else:
-          report_lcd(current_lines)             # repeat current screen in case LCD has lost it
-  # change contrast
-  with open('contrast.txt', "r") as f:
-    contrast_new = int(sub('\\contrastn', '', f.read()))
-    if contrast_new != contrast:
-      disp = LCD.PCD8544(DC, RST, SCLK, DIN, CS)
-      disp.begin(contrast = contrast)
-      contrast = contrast_new
   sys.stdout.flush()                            # output to file now
   time.sleep(1)
 

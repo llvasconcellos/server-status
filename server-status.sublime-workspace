@@ -11,6 +11,22 @@
 	},
 	"buffers":
 	[
+		{
+			"file": "scripts_check.sh",
+			"settings":
+			{
+				"buffer_size": 776,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": ".gitignore",
+			"settings":
+			{
+				"buffer_size": 894,
+				"line_ending": "Unix"
+			}
+		}
 	],
 	"build_system": "",
 	"build_system_choices":
@@ -19,10 +35,14 @@
 	"build_varint": "",
 	"command_palette":
 	{
-		"height": 392.0,
-		"last_filter": "",
+		"height": 47.0,
+		"last_filter": "browser",
 		"selected_items":
 		[
+			[
+				"browser",
+				"Markdown Preview: Preview in Browser"
+			],
 			[
 				"",
 				"Markdown Preview: Preview in Browser"
@@ -47,26 +67,63 @@
 		"side_bar_visible": false,
 		"status_bar_visible": false
 	},
+	"expanded_folders":
+	[
+		"/Users/robinedwards/Documents/MSF/Buendia/server-status"
+	],
 	"file_history":
 	[
-		"/Users/robinedwards/Documents/MSF/Buendia/server-status/.profile.sh",
+		"/Users/robinedwards/Documents/MSF/Buendia/server-status/report_failed_process.py",
+		"/Users/robinedwards/Documents/MSF/Buendia/server-status/button_test.py",
+		"/Users/robinedwards/Documents/MSF/Buendia/server-status/button_shutdown.py",
+		"/Users/robinedwards/Documents/MSF/Buendia/server-status/setup/update.sh",
+		"/Users/robinedwards/Documents/MSF/Buendia/server-status/server_status_dev.py",
+		"/Users/robinedwards/Documents/MSF/Buendia/server-status/setup/setup.sh",
+		"/Users/robinedwards/Documents/MSF/Buendia/server-status/setup/system_setup_min.md",
+		"/Users/robinedwards/Documents/MSF/Buendia/server-status/setup/update_not_rtc.sh",
+		"/Users/robinedwards/Documents/MSF/Buendia/server-status/lcd/contrast.py",
+		"/Users/robinedwards/Documents/MSF/Buendia/server-status/test_scripts/report_lines_and_battery.py",
+		"/Users/robinedwards/Documents/MSF/Buendia/server-status/boot_script.sh",
+		"/Users/robinedwards/Documents/MSF/Buendia/server-status/battery_status.py",
+		"/Users/robinedwards/server-status/libraries/Adafruit_Python_GPIO/Adafruit_GPIO/GPIO.py",
+		"/Users/robinedwards/server-status/libraries/Adafruit_Python_GPIO/tests/test_GPIO.py",
+		"/Users/robinedwards/Documents/MSF/Buendia/server-status/hardware_check.txt",
+		"/Users/robinedwards/Documents/MSF/Buendia/server-status/.gitignore",
+		"/Volumes/NO NAME/moxier.csv",
+		"/Users/robinedwards/Documents/MSF/Buendia/server-status/splash_screen.py",
+		"/Users/robinedwards/Documents/MSF/Buendia/server-status/test_scripts/contrast.py",
+		"/Users/robinedwards/Documents/MSF/Buendia/server-status/setup/system_setup.md",
+		"/Users/robinedwards/Documents/MSF/Buendia/server-status/test_scripts/report_lines.py",
+		"/Users/robinedwards/Documents/MSF/Buendia/server-status/systime/systime_set_rtc.py",
+		"/Users/robinedwards/Documents/MSF/Buendia/server-status/.gitmodules",
+		"/Users/robinedwards/Documents/MSF/Buendia/server-status/setup/led_gpio_setup.md",
 		"/Users/robinedwards/Documents/MSF/Buendia/server-status/scripts_check.sh",
+		"/Users/robinedwards/Documents/MSF/Buendia/server-status/notes.md",
+		"/Users/robinedwards/Documents/MSF/Buendia/server-status/truncate_logs.sh",
+		"/Users/robinedwards/Movies/torrent/Blazing Saddles (1974)/Blazing.Saddles.1974.720p.BluRay.x264.YIFY.srt",
+		"/Users/robinedwards/Documents/MSF/Buendia/server-status/systime/README.md",
+		"/Users/robinedwards/Documents/MSF/Buendia/server-status/systime/systime_report.py",
+		"/Users/robinedwards/Documents/MSF/Buendia/server-status/systime/testSDL_DS1307.py",
+		"/Users/robinedwards/Documents/MSF/Buendia/server-status/systime/systime_update_from_rtc.py",
+		"/Users/robinedwards/Documents/MSF/Buendia/server-status/test_scripts/led_off.py",
+		"/Users/robinedwards/Documents/MSF/Buendia/server-status/test_scripts/led_on.py",
+		"/Users/robinedwards/Documents/MSF/Buendia/server-status/server_status.py",
+		"/Users/robinedwards/Documents/MSF/Buendia/server-status/systime_report.py",
+		"/Users/robinedwards/Documents/MSF/Buendia/server-status/contrast.txt",
+		"/Users/robinedwards/Documents/MSF/Buendia/server-status/SDL_DS1307.py",
+		"/Users/robinedwards/Documents/MSF/Buendia/server-status/systime_update_from_rtc.py",
+		"/Users/robinedwards/Documents/MSF/Buendia/server-status/lcd/lcd_test2.py",
+		"/Users/robinedwards/Documents/MSF/Buendia/server-status/.profile.sh",
 		"/Users/robinedwards/Documents/MSF/ODK_old/SETUP/toFlash/flashall.sh",
 		"/Users/robinedwards/Documents/MSF/ODKAggregateOnEdison/installation_script/setup_edison_odk.sh",
 		"/Users/robinedwards/Documents/MSF/ODKAggregateOnEdison/installation_script/setup_edison_odk2.sh",
-		"/Volumes/NO NAME/moxier.csv",
 		"/Users/robinedwards/screenlog.mac_buendia_install.txt",
 		"/Users/robinedwards/screenlog.0",
 		"/Users/robinedwards/screenlog.1",
 		"/Users/robinedwards/Downloads/poky-feed-config-opkg-dbg_1.0-r2_edison.ipk",
 		"/Users/robinedwards/Documents/MSF/Buendia/server-status/setup/hardware_setup.md",
-		"/Users/robinedwards/Documents/MSF/Buendia/server-status/battery_status.py",
-		"/Users/robinedwards/Documents/MSF/Buendia/server-status/.gitignore",
-		"/Users/robinedwards/Documents/MSF/Buendia/server-status/server_status.py",
 		"/Users/robinedwards/Documents/MSF/Buendia/battery/battery_data.csv",
 		"/Users/robinedwards/Documents/MSF/Buendia/server-status/battery/battery_life_analysis.R",
-		"/Users/robinedwards/Documents/MSF/Buendia/server-status/setup/led_gpio_setup.md",
-		"/Users/robinedwards/Documents/MSF/Buendia/server-status/truncate_logs.sh",
 		"/Users/robinedwards/Movies/.DS_Store",
 		"/Users/robinedwards/Documents/MSF/Buendia/server-status/pwm_demo.py",
 		"/Users/robinedwards/Documents/MSF/Buendia/server-status/pwm_demo.c",
@@ -74,11 +131,9 @@
 		"/Users/robinedwards/Documents/MSF/Buendia/server-status/README.md",
 		"/Users/robinedwards/Documents/MSF/Buendia/server-status/battery/README.md",
 		"/Users/robinedwards/Documents/MSF/Buendia/server-status/battery/battery_data.csv",
-		"/Users/robinedwards/Documents/MSF/Buendia/server-status/boot_script.sh",
 		"/Users/robinedwards/Documents/MSF/Buendia/server-status/sd/server_status_log.txt",
 		"/Users/robinedwards/Documents/MSF/Buendia/server-status/sd/battery_status_log.txt",
 		"/Users/robinedwards/Documents/MSF/Buendia/battery/battery_life_analysis.R",
-		"/Users/robinedwards/Documents/MSF/Buendia/server-status/report_failed_process.py",
 		"/Users/robinedwards/Documents/MSF/Buendia/server-status/battery_led_old.py",
 		"/Users/robinedwards/Documents/MSF/Buendia/server-status/battery_status_old.py",
 		"/Users/robinedwards/Documents/MSF/Buendia/server-status/log_charge.sh",
@@ -92,7 +147,7 @@
 	],
 	"find":
 	{
-		"height": 23.0
+		"height": 35.0
 	},
 	"find_in_files":
 	{
@@ -106,6 +161,37 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"testxxxx",
+			"santan",
+			"    ",
+			"\\t",
+			"openmrs_url",
+			"write_now",
+			"multip",
+			"stateOfCharge",
+			"cellVoltage",
+			"sd/",
+			"log",
+			"self",
+			"report_lcd",
+			"LCDProcessClass",
+			"report_lcd",
+			"LCDProcessClass.run",
+			"report_lcd",
+			"\\t",
+			"contrast",
+			"report_lcd",
+			"self.end",
+			"run",
+			"update-rc.d",
+			"battery",
+			"\\n\\n",
+			"[docs]",
+			"\\n\\n",
+			"\\t",
+			"    ",
+			"....",
+			"sd/",
 			"dnsmasq",
 			"dns",
 			"santan",
@@ -148,9 +234,21 @@
 		"highlight": true,
 		"in_selection": false,
 		"preserve_case": false,
-		"regex": false,
+		"regex": true,
 		"replace_history":
 		[
+			"",
+			"    ",
+			"\\n  \\n",
+			"",
+			"\\n  \\n",
+			"  ",
+			"\\t",
+			"x",
+			"..",
+			"\\t",
+			"..",
+			"\\t",
 			""
 		],
 		"reverse": false,
@@ -162,8 +260,66 @@
 	"groups":
 	[
 		{
+			"selected": 1,
 			"sheets":
 			[
+				{
+					"buffer": 0,
+					"file": "scripts_check.sh",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 776,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								776,
+								776
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/ShellScript/Shell-Unix-Generic.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": -0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": ".gitignore",
+					"semi_transient": true,
+					"settings":
+					{
+						"buffer_size": 894,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								678,
+								678
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 376.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				}
 			]
 		}
 	],
@@ -210,7 +366,7 @@
 	"project": "server-status.sublime-project",
 	"replace":
 	{
-		"height": 42.0
+		"height": 64.0
 	},
 	"save_all_on_build": true,
 	"select_file":
@@ -248,7 +404,7 @@
 	"show_open_files": false,
 	"show_tabs": true,
 	"side_bar_visible": true,
-	"side_bar_width": 232.0,
+	"side_bar_width": 251.0,
 	"status_bar_visible": true,
 	"template_settings":
 	{
