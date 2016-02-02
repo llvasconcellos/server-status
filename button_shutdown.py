@@ -15,7 +15,7 @@ def press(args):
   if pin.read() == 1:
     return
   pressed = True
-  print('Hold for 10s to power off Edison ')
+  print('Hold for 5s to power off Edison ')
   i = 0
   while pin.read() == 0:
     i += 1

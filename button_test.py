@@ -14,12 +14,12 @@ def press(args):
   if pin.read() == 1:
     return
   pressed = True
-  print('Hold for 10s to power off Edison ')
+  print('Hold for 5s to power off Edison ')
   i = 0
   while pin.read() == 0:
     i += 1
     time.sleep(.25)
-    if i == 50:
+    if i == 20:
       print 'Powering down..'
       subprocess.call("python /home/root/gpio/lcd/report_lines.py 'Shutting down' 'Wait 2 minutes,' 'then flick the' 'power switch.' 'Au revoir!'", shell=True)
       pressed = False
