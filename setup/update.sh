@@ -14,6 +14,8 @@
 
 echo '1/3: CLONE SERVER-STATUS REPO'
 cd /home/root
+rm -rf server-status
+rm -rf gpio_old
 git clone https://github.com/projectbuendia/server-status
 mv gpio gpio_old || echo 'no existing gpio folder'
 cp -R server-status gpio
