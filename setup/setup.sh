@@ -32,7 +32,7 @@ echo set const >> ~/.nanorc  # so nano reports line number
 echo '2/6: CLONE SERVER-STATUS REPO'
 cd /home/root
 git clone https://github.com/projectbuendia/server-status
-mv server-status gpio
+cp -R server-status gpio
 chmod -R 755 gpio
 
 echo '3/6: INSTALL LCD & GPIO PYTHON LIBS'

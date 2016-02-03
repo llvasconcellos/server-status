@@ -162,8 +162,10 @@ def check_url(url):
 report_lcd(['SYSTEM BOOTING'])
 
 print '*** START MAIN LOOP ***'
+k = 0
 
 while True:
+  k = (k + 1) % 60
   if buendia == 0:
     # STAGE 1: Buendia not running. Ping for response
     buendia_status = check_url(buendia_url)
@@ -179,6 +181,8 @@ while True:
     if openmrs_ext == 0:                        # has OpenMRS not been detected yet?
       openmrs_status = check_url(openmrs_url)   # Ping OpenMRS for response
       openmrs_new = openmrs_status[0]
+      if k == 0:
+        report_lcd(current_lcd_lines)
       if openmrs_new != 0:                      # OpenMRS not detected
         # STAGE 3: OpenMRS detected
         openmrs_ext = 1                         # [possible bug if openmrs_internal_status returned code 2..]
