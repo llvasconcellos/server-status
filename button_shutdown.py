@@ -28,7 +28,7 @@ def press(args):
       time.sleep(30)
       subprocess.call('poweroff', shell=True)
       os._exit
-  subprocess.call("python /home/root/gpio/lcd/report_lines_and_battery.py 'Shutdown cancelled'", shell=True)
+  subprocess.call("python /home/root/gpio/lcd/report_lines_and_battery.py 'Shutdown' 'cancelled'", shell=True)
   pressed = False
 
 while True:

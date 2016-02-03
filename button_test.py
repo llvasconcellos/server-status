@@ -25,7 +25,7 @@ def press(args):
       subprocess.call("python /home/root/gpio/lcd/report_lines.py 'Shutting down' 'Wait 2 minutes,' 'then flick the' 'power switch.' 'Au revoir!'", shell=True)
       pressed = False
       return
-  subprocess.call("python /home/root/gpio/lcd/report_lines_and_battery.py 'Shutdown cancelled'", shell=True)
+  subprocess.call("python /home/root/gpio/lcd/report_lines_and_battery.py 'Shutdown' 'cancelled'", shell=True)
   pressed = False
 
 while True:
