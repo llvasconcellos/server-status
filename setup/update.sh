@@ -17,9 +17,10 @@ cd /home/root
 rm -rf server-status
 rm -rf gpio_old
 git clone https://github.com/projectbuendia/server-status
-mv gpio gpio_old && echo 'no existing gpio folder'
-mv server-status gpio
+mv gpio gpio_old || echo 'no existing gpio folder'
+cp -R server-status gpio
 chmod -R 755 gpio
+cd gpio
 
 #### SD card 
 echo '2/3: MOUNT S.D. CARD'
