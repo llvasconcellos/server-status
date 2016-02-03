@@ -31,10 +31,8 @@ def press(args):
   subprocess.call("python /home/root/gpio/lcd/report_lines_and_battery.py 'Shutdown' 'cancelled'", shell=True)
   pressed = False
 
-while True:
-  pin = mraa.Gpio(32)
-  pin.dir(mraa.DIR_IN)
-  pin.isr(mraa.EDGE_BOTH, press, press)
-  time.sleep(10800)
-  pin.isrExit()
-
+pin = mraa.Gpio(32)
+pin.dir(mraa.DIR_IN)
+pin.isr(mraa.EDGE_BOTH, press, press)
+time.sleep(3600)
+pin.isrExit()
