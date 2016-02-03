@@ -22,5 +22,9 @@ while true; do
 	[ $batt == 0 ] && echo 'battery_status.py failed'
 	[ $serv == 0 ] && echo 'server_status.py failed' && python /home/root/gpio/lcd/report_lines_and_battery.py 'Server info not' 'reporting.' &
 	[ $butt == 0 ] && echo 'button_shutdown.py failed' && python button_shutdown.py >> sd/logs/button_log.txt 2>&1 &
+
+	# kill any excess scripts (safeguard against starting too many somehow)
+	[ $butt -gt 1 ] && for i in $(seq $(expr $butt - 1)); do kill $(echo "$butt_lines" | sed -n $i'p' | grep -oE '[0-9]+' | head -n 1); echo duplicate process killed >> sd/logs/button_log.txt; done
+
 	sleep 60
 done
