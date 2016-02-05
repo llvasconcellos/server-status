@@ -6,7 +6,6 @@ cd /home/root/gpio
 
 while true; do
 	prs=$(ps)
-	echo $(date)
 
 	# filter relevant process rows
 	batt_lines=$(echo "$prs" | grep battery_status.py | grep -v grep);
